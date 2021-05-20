@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from player import Player
 from platform import Platform
+from ladder import Ladder
 
 
 class Game:
@@ -17,6 +18,7 @@ class Game:
     def new(self):
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
+        self.ladders = pygame.sprite.Group()
         self.player = Player(self)
         self.all_sprites.add(self.player)
         p1 = Platform(0, HEIGHT-40, WIDTH, 40)
@@ -25,6 +27,10 @@ class Game:
         p2 = Platform(WIDTH / 2 - 50, HEIGHT * 3 / 4, 100, 20)
         self.all_sprites.add(p2)
         self.platforms.add(p2)
+
+        l1 = Ladder(WIDTH / 2 - 50, HEIGHT * 1/3, 20, 250)
+        self.all_sprites.add(l1)
+        self.ladders.add(l1)
 
         self.run()
 
@@ -58,6 +64,8 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     self.player.jump()
+                if event.key == pygame.K_UP:
+                    self.player.climb()
 
     def draw(self):
         self.screen.fill(BLACK)

@@ -14,15 +14,31 @@ class Player(pygame.sprite.Sprite):
         self.pos = vec(WIDTH/2, HEIGHT/2)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+        self.isClimbing = False
+        self.isJumpAvaliable = False
+        self.climbedLadder = None
 
     def update(self):
-        self.acc = vec(0, PLAYER_GRAV)
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_LEFT]:
-            self.acc.x = -PLAYER_ACC
-        if keys[pygame.K_RIGHT]:
-            self.acc.x = PLAYER_ACC
+        if not self.isClimbing:
+            self.acc = vec(0, PLAYER_GRAV)
+
+            if keys[pygame.K_LEFT]:
+                self.acc.x = -PLAYER_ACC
+            if keys[pygame.K_RIGHT]:
+                self.acc.x = PLAYER_ACC
+        else:
+            self.acc = vec(0, 0)
+
+            #checking for dropdown after climbing action
+            if self.rect.centery >  self.climbedLadder.rect.top and self.rect.bottom < self.climbedLadder.rect.bottom+5:
+                if keys[pygame.K_UP]:
+                    self.pos.y += -5
+                if keys[pygame.K_DOWN]:
+                    self.pos.y += 5
+            else:
+                self.isClimbing = False
 
         # apply friction
         self.acc.x += self.vel.x * PLAYER_FRICTION
@@ -42,5 +58,17 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += 8
         hits = pygame.sprite.spritecollide(self, self.game.platforms, False)
         self.rect.x -= 8
+        if hits or self.isClimbing:
+            self.isClimbing = False
+            self.vel.y = -15
+
+    def climb(self):
+
+        hits = pygame.sprite.spritecollide(self, self.game.ladders, False)
+
         if hits:
-            self.vel.y = -20
+            self.isClimbing = True
+            self.vel = vec(0, 0)
+            self.climbedLadder = hits[0]
+            self.pos.x = self.climbedLadder.rect.centerx
+
