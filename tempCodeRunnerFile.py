@@ -1,0 +1,1 @@
+hits = pygame.sprite.spritecollide(self, self.game.ladders, False)

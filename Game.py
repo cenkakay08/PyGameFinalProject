@@ -3,6 +3,7 @@ from settings import *
 from player import Player
 from platform import Platform
 from ladder import Ladder
+from coin import Coin
 
 
 class Game:
@@ -19,6 +20,7 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
         self.ladders = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
         self.player = Player(self)
         self.all_sprites.add(self.player)
         p1 = Platform(0, HEIGHT-40, WIDTH, 40)
@@ -31,6 +33,10 @@ class Game:
         l1 = Ladder(WIDTH / 2 - 50, HEIGHT * 1/3, 20, 250)
         self.all_sprites.add(l1)
         self.ladders.add(l1)
+
+        c1 = Coin(110, HEIGHT-80, self)
+        self.all_sprites.add(c1)
+        self.coins.add(c1)
 
         self.run()
 
@@ -54,6 +60,8 @@ class Game:
             if hits:
                 self.player.pos.y = hits[0].rect.top+1
                 self.player.vel.y = 0
+
+        
 
     def events(self):
         for event in pygame.event.get():
