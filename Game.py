@@ -34,7 +34,7 @@ class Game:
         self.all_sprites.add(l1)
         self.ladders.add(l1)
 
-        c1 = Coin(110, HEIGHT-80, self)
+        c1 = Coin(110, HEIGHT-80, self.player)
         self.all_sprites.add(c1)
         self.coins.add(c1)
 
@@ -61,6 +61,11 @@ class Game:
                 self.player.pos.y = hits[0].rect.top+1
                 self.player.vel.y = 0
 
+        #remove picked coins
+        for coin in self.coins:
+            if coin.isPicked:
+                self.all_sprites.remove(coin)
+                self.coins.remove(coin)
         
 
     def events(self):
