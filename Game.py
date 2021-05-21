@@ -4,6 +4,8 @@ from player import Player
 from platform import Platform
 from ladder import Ladder
 from coin import Coin
+from missile import Missile
+from guided_missile import Guided_Missile
 
 
 class Game:
@@ -21,6 +23,8 @@ class Game:
         self.platforms = pygame.sprite.Group()
         self.ladders = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.missiles = pygame.sprite.Group()
+        self.guided_missiles = pygame.sprite.Group()
         self.player = Player(self)
         self.all_sprites.add(self.player)
         p1 = Platform(0, HEIGHT-40, WIDTH, 40)
@@ -30,13 +34,21 @@ class Game:
         self.all_sprites.add(p2)
         self.platforms.add(p2)
 
-        l1 = Ladder(WIDTH / 2 - 50, HEIGHT * 1/3, 20, 250)
+        l1 = Ladder(WIDTH / 2 - 50, HEIGHT * 1/3, 250)
         self.all_sprites.add(l1)
         self.ladders.add(l1)
 
         c1 = Coin(110, HEIGHT-80, self.player)
         self.all_sprites.add(c1)
         self.coins.add(c1)
+
+        m1 = Missile(self.player)
+        self.all_sprites.add(m1)
+        self.missiles.add(m1)
+
+        g1 = Guided_Missile(self.player)
+        self.all_sprites.add(g1)
+        self.guided_missiles.add(g1)
 
         self.run()
 
@@ -66,6 +78,18 @@ class Game:
             if coin.isPicked:
                 self.all_sprites.remove(coin)
                 self.coins.remove(coin)
+
+        #remove missiles out of screen
+        for missile in self.missiles:
+            if missile.rect.top > HEIGHT:
+                self.all_sprites.remove(missile)
+                self.missiles.remove(missile)
+
+        #remove guided missiles out of screen
+        for guided_missile in self.guided_missiles:
+            if guided_missile.rect.top > HEIGHT or guided_missile.rect.left > WIDTH:
+                self.all_sprites.remove(guided_missile)
+                self.guided_missiles.remove(guided_missile)
         
 
     def events(self):
