@@ -1,5 +1,6 @@
 import pygame
 from settings import *
+from levels import *
 from player import Player
 from platform import Platform
 from ladder import Ladder
@@ -27,20 +28,21 @@ class Game:
         self.guided_missiles = pygame.sprite.Group()
         self.player = Player(self)
         self.all_sprites.add(self.player)
-        p1 = Platform(0, HEIGHT-40, WIDTH, 40)
-        self.all_sprites.add(p1)
-        self.platforms.add(p1)
-        p2 = Platform(WIDTH / 2 - 50, HEIGHT * 3 / 4, 100, 20)
-        self.all_sprites.add(p2)
-        self.platforms.add(p2)
+        
+        for plat in LEVELS[0][0]:
+            p = Platform(*plat)
+            self.all_sprites.add(p)
+            self.platforms.add(p)
 
-        l1 = Ladder(WIDTH / 2 - 50, HEIGHT * 1/3, 250)
-        self.all_sprites.add(l1)
-        self.ladders.add(l1)
+        for lad in LEVELS[0][1]:
+            l = Ladder(*lad)
+            self.all_sprites.add(l)
+            self.ladders.add(l)
 
-        c1 = Coin(110, HEIGHT-80, self.player)
-        self.all_sprites.add(c1)
-        self.coins.add(c1)
+        for coin in LEVELS[0][2]:
+            c = Coin(coin[0],coin[1],self.player)
+            self.all_sprites.add(c)
+            self.coins.add(c)
 
         m1 = Missile(self.player)
         self.all_sprites.add(m1)
@@ -90,6 +92,11 @@ class Game:
             if guided_missile.rect.top > HEIGHT or guided_missile.rect.left > WIDTH:
                 self.all_sprites.remove(guided_missile)
                 self.guided_missiles.remove(guided_missile)
+
+        #check win
+        if len(self.coins) == 0:
+            #YOU WON
+            None
         
 
     def events(self):
@@ -101,7 +108,7 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     self.player.jump()
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     self.player.climb()
 
     def draw(self):

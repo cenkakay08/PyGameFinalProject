@@ -2,6 +2,10 @@ WIDTH = 800
 HEIGHT = 600
 FPS = 60
 
+#Tile System
+TILE_W = 20
+TILE_H = 20
+
 #Player prop
 PLAYER_ACC = 0.5
 PLAYER_FRICTION = -0.12

@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.isClimbing = False
         self.isJumpAvaliable = False
         self.climbedLadder = None
+        self.isDead = False
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -53,6 +54,9 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.midbottom = self.pos
 
+        if self.rect.top > HEIGHT:
+            self.playerDied()
+
     def jump(self):
         
         self.rect.x += 8
@@ -60,7 +64,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x -= 8
         if hits or self.isClimbing:
             self.isClimbing = False
-            self.vel.y = -15
+            self.vel.y = -12
 
     def climb(self):
 
@@ -72,3 +76,6 @@ class Player(pygame.sprite.Sprite):
             self.climbedLadder = hits[0]
             self.pos.x = self.climbedLadder.rect.centerx
 
+    def playerDied(self):
+        self.isDead = True
+        print(self.isDead)
