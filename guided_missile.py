@@ -12,15 +12,21 @@ class Guided_Missile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 30
         self.rect.y = -50
-        self.inRange = False
+        self.inXRange = False
+        self.inYRange  =False
 
     def update(self):
+        
+        if not self.inXRange and not self.inYRange:
+            if self.player.rect.top < self.rect.y < self.player.rect.bottom:
+                self.inXRange = True
+            elif self.player.rect.left < self.rect.x < self.player.rect.right:
+                self.inYRange = True
 
-        if self.rect.y > self.player.rect.top and self.rect.y < self.player.rect.bottom:
-            self.inRange = True
-
-        if self.inRange:
-            self.rect.x += 3
+        if self.inXRange:
+            self.rect.x += DIF
+        elif self.inYRange:
+            self.rect.y += DIF
         else:
             self.rect.y += 2
 

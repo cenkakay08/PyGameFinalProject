@@ -27,31 +27,10 @@ class Game:
         self.missiles = pygame.sprite.Group()
         self.guided_missiles = pygame.sprite.Group()
         self.player = Player(self)
-        self.all_sprites.add(self.player)
+
+        createLevel(self, 1)
         
-        for plat in LEVELS[0][0]:
-            p = Platform(*plat)
-            self.all_sprites.add(p)
-            self.platforms.add(p)
-
-        for lad in LEVELS[0][1]:
-            l = Ladder(*lad)
-            self.all_sprites.add(l)
-            self.ladders.add(l)
-
-        for coin in LEVELS[0][2]:
-            c = Coin(coin[0],coin[1],self.player)
-            self.all_sprites.add(c)
-            self.coins.add(c)
-
-        m1 = Missile(self.player)
-        self.all_sprites.add(m1)
-        self.missiles.add(m1)
-
-        g1 = Guided_Missile(self.player)
-        self.all_sprites.add(g1)
-        self.guided_missiles.add(g1)
-
+        self.all_sprites.add(self.player)
         self.run()
 
     def run(self):
@@ -72,31 +51,29 @@ class Game:
             hits = pygame.sprite.spritecollide(self.player, self.platforms, False)
     
             if hits:
-                self.player.pos.y = hits[0].rect.top+1
-                self.player.vel.y = 0
+                if self.player.pos.y < hits[0].rect.centery:
+                    self.player.pos.y = hits[0].rect.top+1
+                    self.player.vel.y = 0
 
         #remove picked coins
         for coin in self.coins:
             if coin.isPicked:
-                self.all_sprites.remove(coin)
-                self.coins.remove(coin)
+                coin.kill()
 
         #remove missiles out of screen
         for missile in self.missiles:
             if missile.rect.top > HEIGHT:
-                self.all_sprites.remove(missile)
-                self.missiles.remove(missile)
+                missile.kill()
 
         #remove guided missiles out of screen
         for guided_missile in self.guided_missiles:
             if guided_missile.rect.top > HEIGHT or guided_missile.rect.left > WIDTH:
-                self.all_sprites.remove(guided_missile)
-                self.guided_missiles.remove(guided_missile)
+                guided_missile.kill()
 
         #check win
         if len(self.coins) == 0:
             #YOU WON
-            None
+            pass
         
 
     def events(self):
