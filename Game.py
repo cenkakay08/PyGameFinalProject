@@ -18,6 +18,7 @@ class Game:
         pygame.display.set_caption("JumpMan")
         self.clock = pygame.time.Clock()
         self.running = True
+        self.level = 1
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -28,9 +29,8 @@ class Game:
         self.guided_missiles = pygame.sprite.Group()
         self.player = Player(self)
 
-        createLevel(self, 1)
+        createLevel(self, self.level)
         
-        self.all_sprites.add(self.player)
         self.run()
 
     def run(self):
@@ -50,10 +50,9 @@ class Game:
         if self.player.vel.y > 0 :
             hits = pygame.sprite.spritecollide(self.player, self.platforms, False)
     
-            if hits:
-                if self.player.pos.y < hits[0].rect.centery:
-                    self.player.pos.y = hits[0].rect.top+1
-                    self.player.vel.y = 0
+            if hits and self.player.pos.y < hits[0].rect.centery:
+                self.player.pos.y = hits[0].rect.top+1
+                self.player.vel.y = 0
 
         #remove picked coins
         for coin in self.coins:
@@ -74,6 +73,15 @@ class Game:
         if len(self.coins) == 0:
             #YOU WON
             pass
+
+        #check death
+        if self.player.isDead:
+            for sprite in self.all_sprites:
+                sprite.kill()
+
+            self.player = Player(self)
+
+            createLevel(self, self.level)
         
 
     def events(self):
