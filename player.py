@@ -66,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x -= 8
         if hits or self.isClimbing:
             self.isClimbing = False
-            self.vel.y = -15
+            self.vel.y = -16
 
     def climb(self):
 
@@ -80,3 +80,7 @@ class Player(pygame.sprite.Sprite):
 
     def playerDied(self):
         self.isDead = True
+
+    def reLocate(self, x, y):
+        self.rect.center = (x, y)
+        self.pos = vec(x, y)

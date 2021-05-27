@@ -22,6 +22,13 @@ def createLevel(game, levelIndex):
         g1 = Guided_Missile(game.player)
         game.guided_missiles.add(g1)
 
+    elif levelIndex == 2:
+        platform = [(TILE_W*5, HEIGHT-TILE_H*2, TILE_W*12, TILE_H),(TILE_W*23, TILE_H*28, TILE_W*12, TILE_H),(TILE_W*8, TILE_H*18, TILE_W*7, TILE_H),(TILE_W*25, TILE_H*18, TILE_W*7, TILE_H),(TILE_W*30, TILE_H*13, TILE_W*5, TILE_H),(TILE_W*10, TILE_H*8, TILE_W*5, TILE_H)]
+        ladder = [(TILE_W*19.5, TILE_H*3, TILE_H*22)]
+        coi = [(TILE_W*30, TILE_H*26, game.player),(TILE_W*10, TILE_H*16, game.player),(TILE_W*27, TILE_H*16, game.player),(TILE_W*32, TILE_H*8, game.player),(TILE_W*12, TILE_H*6, game.player)]
+
+        game.player.reLocate(TILE_W*13,TILE_H*25)
+
     for plat in platform:
             p = Platform(*plat)
             game.platforms.add(p)

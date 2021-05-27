@@ -18,7 +18,7 @@ class Game:
         pygame.display.set_caption("JumpMan")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.level = 1
+        self.level = 2
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -50,7 +50,7 @@ class Game:
         if self.player.vel.y > 0 :
             hits = pygame.sprite.spritecollide(self.player, self.platforms, False)
     
-            if hits and self.player.pos.y < hits[0].rect.centery:
+            if hits and self.player.pos.y <= hits[0].rect.centery:
                 self.player.pos.y = hits[0].rect.top+1
                 self.player.vel.y = 0
 
