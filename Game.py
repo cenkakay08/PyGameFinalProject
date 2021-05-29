@@ -7,6 +7,7 @@ from ladder import Ladder
 from coin import Coin
 from missile import Missile
 from guided_missile import Guided_Missile
+from spawner import Spawner
 
 
 class Game:
@@ -18,7 +19,7 @@ class Game:
         pygame.display.set_caption("JumpMan")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.level = 2
+        self.level = 1
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -28,7 +29,8 @@ class Game:
         self.missiles = pygame.sprite.Group()
         self.guided_missiles = pygame.sprite.Group()
         self.player = Player(self)
-
+        self.spawner = Spawner(self)
+        pygame.time.set_timer(pygame.USEREVENT, 200)
         createLevel(self, self.level)
         
         self.run()
@@ -71,8 +73,15 @@ class Game:
 
         #check win
         if len(self.coins) == 0:
-            #YOU WON
-            pass
+            if self.level < 2:
+                self.level += 1
+
+                for sprite in self.all_sprites:
+                    sprite.kill()
+
+                self.player = Player(self)
+
+                createLevel(self, self.level)
 
         #check death
         if self.player.isDead:
@@ -95,6 +104,14 @@ class Game:
                     self.player.jump()
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     self.player.climb()
+
+            if event.type == pygame.USEREVENT:
+                self.spawner.current_gmSpawnTime -= 1
+                self.spawner.current_mSpawnTime -= 1
+                if self.spawner.current_gmSpawnTime <= 0:
+                    self.spawner.spawnGM()
+                if self.spawner.current_mSpawnTime <= 0:
+                    self.spawner.spawnM()
 
     def draw(self):
         self.screen.fill(BLACK)
