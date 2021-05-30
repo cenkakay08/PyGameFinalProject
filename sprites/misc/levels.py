@@ -1,14 +1,14 @@
+from robot import Robot
+from ladder import Ladder
+from coin import Coin
+from platform import Platform
+from guided_missile import Guided_Missile
+from settings import *
 from re import match
 import sys
-sys.path.insert(1,'../enemy/')
-sys.path.insert(1,'../environment/')
-sys.path.insert(1,'../../')
-from settings import *
-from guided_missile import Guided_Missile
-from platform import Platform
-from coin import Coin
-from ladder import Ladder
-from robot import Robot
+sys.path.insert(1, '../enemy/')
+sys.path.insert(1, '../environment/')
+sys.path.insert(1, '../../')
 
 
 def createLevel(game, levelIndex):
@@ -69,9 +69,16 @@ def createLevel(game, levelIndex):
 
         game.spawner.restartVariables()
         game.spawner.bMax = 50
-        game.spawner.bSpawnTime = 10
+        game.spawner.bSpawnTime = 20
     else:
-        pass
+        platform = [(TILE_W*10, HEIGHT-TILE_H*2, TILE_W*20, TILE_H), (TILE_W*7, TILE_H*23, TILE_W*5, TILE_H),
+                    (TILE_W*28, TILE_H*23, TILE_W*5, TILE_H), (TILE_W*12, TILE_H*19, TILE_W*4, TILE_H), (TILE_W*24, TILE_H*18, TILE_W*4, TILE_H), (TILE_W*7, TILE_H*16, TILE_W*4, TILE_H), (TILE_W*19, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*29, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*3, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*13, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*28, TILE_H*11, TILE_W*3, TILE_H), (TILE_W*19, TILE_H*10, TILE_W*3, TILE_H), (TILE_W*7, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*14, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*25, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*32, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*18, TILE_H*4, TILE_W*5, TILE_H)]
+        coi = [(TILE_W*7, TILE_H*20, game.player), (TILE_W*19, TILE_H*18, game.player), (TILE_W*32, TILE_H*20, game.player),
+               (TILE_W*15, TILE_H*16, game.player), (TILE_W*32, TILE_H*12, game.player), (TILE_W*24, TILE_H*11, game.player), (TILE_W*3, TILE_H*9, game.player), (TILE_W*20, TILE_H*8, game.player), (TILE_W*33, TILE_H*5, game.player), (TILE_W*19, TILE_H, game.player)]
+
+        game.spawner.restartVariables()
+        game.spawner.lbMax = 50
+        game.spawner.lbSpawnTime = 25
 
     for plat in platform:
         p = Platform(*plat)

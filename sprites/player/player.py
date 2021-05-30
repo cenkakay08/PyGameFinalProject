@@ -79,6 +79,7 @@ class Player(pygame.sprite.Sprite):
 
         if hits:
             self.isClimbing = True
+            self.isJumpAvaliable = True
             self.vel = vec(0, 0)
             self.climbedLadder = hits[0]
             self.pos.x = self.climbedLadder.rect.centerx

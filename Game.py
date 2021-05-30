@@ -27,7 +27,7 @@ class Game:
         pygame.display.set_caption("JumpMan")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.level = 4
+        self.level = 1
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -85,7 +85,7 @@ class Game:
 
         #check win
         if len(self.coins) == 0:
-            if self.level < 2:
+            if self.level < 5:
                 self.level += 1
 
                 for sprite in self.all_sprites:
