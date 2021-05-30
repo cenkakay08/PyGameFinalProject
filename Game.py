@@ -27,7 +27,7 @@ class Game:
         pygame.display.set_caption("JumpMan")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.level = 3
+        self.level = 4
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
