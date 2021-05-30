@@ -25,7 +25,6 @@ class Spawner(pygame.sprite.Sprite):
         self.current_gmSpawnTime = self.gmSpawnTime
 
     def spawnM(self):
-        print(self.mMax)
         if self.mMax > 0:
             m1 = Missile(self.game.player)
             self.game.missiles.add(m1)

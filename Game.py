@@ -8,6 +8,7 @@ from coin import Coin
 from missile import Missile
 from guided_missile import Guided_Missile
 from spawner import Spawner
+from robot import Robot
 
 
 class Game:
@@ -28,10 +29,15 @@ class Game:
         self.coins = pygame.sprite.Group()
         self.missiles = pygame.sprite.Group()
         self.guided_missiles = pygame.sprite.Group()
+        self.robots = pygame.sprite.Group()
         self.player = Player(self)
         self.spawner = Spawner(self)
         pygame.time.set_timer(pygame.USEREVENT, 200)
         createLevel(self, self.level)
+
+        r1 = Robot(self, 200, 550)
+        self.robots.add(r1)
+        self.all_sprites.add(r1)
         
         self.run()
 

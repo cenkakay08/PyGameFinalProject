@@ -16,11 +16,11 @@ def createLevel(game, levelIndex):
         ladder = [(TILE_W*6, TILE_H*17, TILE_H*11),(TILE_W*33, TILE_H*17, TILE_H*11),(TILE_W*31, TILE_H*7, TILE_H*11)]
         coi = [(TILE_W*9, TILE_H*26, game.player),(TILE_W*30, TILE_H*26, game.player),(TILE_W*14, TILE_H*16, game.player),(TILE_W*25, TILE_H*16, game.player),(TILE_W*14, TILE_H*6, game.player)]
         
-        g1 = Guided_Missile(game.player,50,-50)
-        game.guided_missiles.add(g1)
+        #g1 = Guided_Missile(game.player,50,-50)
+        #game.guided_missiles.add(g1)
 
         game.spawner.gmMax = 0
-        game.spawner.mMax = 10
+        game.spawner.mMax = 0
         game.spawner.gmSpawnTime = 10
         game.spawner.mSpawnTime = 10
 
