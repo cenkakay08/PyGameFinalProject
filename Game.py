@@ -27,7 +27,7 @@ class Game:
         pygame.display.set_caption("JumpMan")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.level = 1
+        self.level = 3
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -43,10 +43,6 @@ class Game:
         self.spawner = Spawner(self)
         pygame.time.set_timer(pygame.USEREVENT, 200)
         createLevel(self, self.level)
-
-        l1 = LaserBeam(self.player)
-        self.laser_beams.add(l1)
-        self.all_sprites.add(l1)
         
         self.run()
 
@@ -70,6 +66,7 @@ class Game:
             if hits and self.player.pos.y <= hits[0].rect.centery:
                 self.player.pos.y = hits[0].rect.top+1
                 self.player.vel.y = 0
+                self.player.isJumpAvaliable = True
 
         #remove picked coins
         for coin in self.coins:

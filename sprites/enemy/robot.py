@@ -13,7 +13,8 @@ class Robot(pygame.sprite.Sprite):
         self.image = pygame.Surface((30, 40))
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.x = x
+        self.rect.y = y
         self.isClimbing = False
         self.climbedLadder = None
         self.standingPlatform = None
@@ -56,12 +57,12 @@ class Robot(pygame.sprite.Sprite):
                 if self.goRight:
 
                     if self.rect.right < self.standingPlatform.rect.right-3:
-                        self.rect.x +=3
+                        self.rect.x +=2
                     else:
                         self.goRight = False
                 else:
                     if self.rect.left > self.standingPlatform.rect.left+3:
-                        self.rect.x -=3
+                        self.rect.x -=2
                     else:
                         self.goRight = True
 

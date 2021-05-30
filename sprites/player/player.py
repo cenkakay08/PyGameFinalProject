@@ -12,8 +12,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((30, 40))
         self.image.fill(BLUE)
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH/2, HEIGHT/2)
-        self.pos = vec(WIDTH/2, HEIGHT/2)
+        self.rect.center = (WIDTH/2, TILE_H*28)
+        self.pos = vec(WIDTH/2, TILE_H*28)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
         self.isClimbing = False
@@ -63,12 +63,15 @@ class Player(pygame.sprite.Sprite):
 
     def jump(self):
         
-        self.rect.x += 8
-        hits = pygame.sprite.spritecollide(self, self.game.platforms, False)
-        self.rect.x -= 8
-        if hits or self.isClimbing:
-            self.isClimbing = False
-            self.vel.y = -16
+        if self.isJumpAvaliable:
+            self.rect.x += 8
+            hits = pygame.sprite.spritecollide(self, self.game.platforms, False)
+            self.rect.x -= 8
+            if hits or self.isClimbing:
+                self.isClimbing = False
+                self.vel.y = -16
+
+            self.isJumpAvaliable = False
 
     def climb(self):
 

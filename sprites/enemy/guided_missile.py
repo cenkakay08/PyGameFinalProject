@@ -33,7 +33,7 @@ class Guided_Missile(pygame.sprite.Sprite):
         if self.inXRange:
             self.rect.x += DIF*self.towards
         elif self.inYRange:
-            self.rect.y += DIF*self.towards
+            self.rect.y += (DIF+2)*self.towards
         else:
             self.rect.y += 2
 
