@@ -1,4 +1,6 @@
 import pygame
+import sys
+sys.path.insert(1,'../enemy/')
 from settings import *
 vec = pygame.math.Vector2
 

@@ -1,4 +1,9 @@
 import pygame
+import sys
+sys.path.insert(1,'sprites/enemy/')
+sys.path.insert(1,'sprites/environment/')
+sys.path.insert(1,'sprites/player/')
+sys.path.insert(1,'sprites/misc/')
 from settings import *
 from levels import *
 from player import Player
@@ -10,6 +15,7 @@ from guided_missile import Guided_Missile
 from spawner import Spawner
 from robot import Robot
 from bomb import Bomb
+from laser_beam import LasserBeam
 
 
 class Game:
@@ -116,10 +122,13 @@ class Game:
             if event.type == pygame.USEREVENT:
                 self.spawner.current_gmSpawnTime -= 1
                 self.spawner.current_mSpawnTime -= 1
+                self.spawner.current_bSpawnTime -= 1
                 if self.spawner.current_gmSpawnTime <= 0:
                     self.spawner.spawnGM()
                 if self.spawner.current_mSpawnTime <= 0:
                     self.spawner.spawnM()
+                if self.spawner.current_bSpawnTime <= 0:
+                    self.spawner.spawnB()
 
     def draw(self):
         self.screen.fill(BLACK)

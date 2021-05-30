@@ -1,5 +1,7 @@
 import pygame
 import random
+import sys
+sys.path.insert(1,'../../')
 from settings import *
 vec = pygame.math.Vector2
 

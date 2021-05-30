@@ -1,5 +1,9 @@
-from settings import *
 from re import match
+import sys
+sys.path.insert(1,'../enemy/')
+sys.path.insert(1,'../environment/')
+sys.path.insert(1,'../../')
+from settings import *
 from missile import Missile
 from guided_missile import Guided_Missile
 from platform import Platform
