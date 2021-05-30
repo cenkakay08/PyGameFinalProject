@@ -15,7 +15,7 @@ from guided_missile import Guided_Missile
 from spawner import Spawner
 from robot import Robot
 from bomb import Bomb
-from laser_beam import LasserBeam
+from laser_beam import LaserBeam
 
 
 class Game:
@@ -38,14 +38,15 @@ class Game:
         self.guided_missiles = pygame.sprite.Group()
         self.robots = pygame.sprite.Group()
         self.bombs = pygame.sprite.Group()
+        self.laser_beams = pygame.sprite.Group()
         self.player = Player(self)
         self.spawner = Spawner(self)
         pygame.time.set_timer(pygame.USEREVENT, 200)
         createLevel(self, self.level)
 
-        b1 = Bomb(self.player)
-        self.bombs.add(b1)
-        self.all_sprites.add(b1)
+        l1 = LaserBeam(self.player)
+        self.laser_beams.add(l1)
+        self.all_sprites.add(l1)
         
         self.run()
 
@@ -123,12 +124,15 @@ class Game:
                 self.spawner.current_gmSpawnTime -= 1
                 self.spawner.current_mSpawnTime -= 1
                 self.spawner.current_bSpawnTime -= 1
+                self.spawner.current_lbSpawnTime -= 1
                 if self.spawner.current_gmSpawnTime <= 0:
                     self.spawner.spawnGM()
                 if self.spawner.current_mSpawnTime <= 0:
                     self.spawner.spawnM()
                 if self.spawner.current_bSpawnTime <= 0:
                     self.spawner.spawnB()
+                if self.spawner.current_lbSpawnTime <= 0:
+                    self.spawner.spawnLB()
 
     def draw(self):
         self.screen.fill(BLACK)
