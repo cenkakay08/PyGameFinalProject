@@ -20,6 +20,15 @@ class Player(pygame.sprite.Sprite):
         self.isJumpAvaliable = False
         self.climbedLadder = None
         self.isDead = False
+        self.health = 3
+
+    def initial(self):
+        if game.difficulty == 1:
+            self.health = 5
+        elif game.difficulty == 2:
+            self.health = 3
+        else:
+            self.health = 1
 
     def update(self):
         keys = pygame.key.get_pressed()

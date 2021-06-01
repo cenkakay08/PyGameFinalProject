@@ -13,7 +13,7 @@ class LaserBeam(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
         self.rect.x = -50
-        self.rect.centery = random.randint(50, HEIGHT-50)
+        self.rect.centery = self.player.rect.centery
         self.chargingTime = 200
         self.standingTime = 50
 

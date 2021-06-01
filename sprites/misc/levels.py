@@ -1,20 +1,26 @@
+
+import sys
+sys.path.insert(1, '../enemy/')
+sys.path.insert(1, '../environment/')
+sys.path.insert(1, '../player/')
+sys.path.insert(1, '../../')
+
 from robot import Robot
 from ladder import Ladder
 from coin import Coin
 from platform import Platform
 from guided_missile import Guided_Missile
+from player import Player
 from settings import *
 from re import match
-import sys
-sys.path.insert(1, '../enemy/')
-sys.path.insert(1, '../environment/')
-sys.path.insert(1, '../../')
 
 
 def createLevel(game, levelIndex):
     platform = []
     ladder = []
     coi = []
+    
+    game.player = Player(game)
 
     if levelIndex == 1:
         platform = [(TILE_W*3, HEIGHT-40, WIDTH-TILE_W*6, TILE_H), (TILE_W*5, TILE_H*18, TILE_W*13,
