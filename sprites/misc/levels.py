@@ -19,7 +19,6 @@ def createLevel(game, levelIndex):
     platform = []
     ladder = []
     coi = []
-    
     game.player = Player(game)
 
     if levelIndex == 1:

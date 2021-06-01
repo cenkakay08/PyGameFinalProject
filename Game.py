@@ -36,6 +36,10 @@ class Game:
         self.selectLevel = False
         self.options = False
         self.clicked = False
+        self.health = 3
+        self.inGameOver = False
+        self.gameOverDelay = 300
+        self.current_gameOverDelay = self.gameOverDelay
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -63,6 +67,15 @@ class Game:
             self.events()
             if self.mainMenu:
                 self.show_start_screen()
+
+            elif self.inGameOver:
+                if self.current_gameOverDelay  <= 0:
+                    self.inGameOver = False
+                    self.changeHealth()
+                    createLevel(self, self.level)
+                else:
+                    self.current_gameOverDelay  -= 1
+                    self.show_go_screen()
 
             else:
                 self.update()
@@ -110,6 +123,12 @@ class Game:
                 sprite.kill()
 
             createLevel(self, self.level)
+            self.health -= 1
+            if self.health <= 0:
+                self.current_gameOverDelay = self.gameOverDelay
+                for sprite in self.all_sprites:
+                    sprite.kill()
+                self.inGameOver = True
         
 
     def events(self):
@@ -121,12 +140,20 @@ class Game:
             if self.mainMenu:
                 if event.type == pygame.MOUSEBUTTONDOWN: 
                     self.clicked = True
+            elif self.inGameOver:
+                pass
             else:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.player.jump()
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         self.player.climb()
+                    if event.key == pygame.K_ESCAPE:
+                        for sprite in self.all_sprites:
+                            sprite.kill()
+                        
+                        self.inGameplay = False
+                        self.mainMenu = True
 
                 if event.type == pygame.USEREVENT:
                     self.spawner.current_gmSpawnTime -= 1
@@ -145,6 +172,10 @@ class Game:
     def draw(self):
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
+        
+        #Health UI
+        pygame.draw.rect(self.screen,RED,[TILE_W,TILE_H,TILE_W,TILE_H])
+        self.draw_text("X"+str(self.health), 'arial', 25, WHITE, TILE_W*3, TILE_H*0.7)
 
         # after drawing everything
         pygame.display.flip()
@@ -163,7 +194,9 @@ class Game:
         pygame.display.flip()
 
     def show_go_screen(self):
-        pass
+        self.screen.fill(BLACK)
+        self.draw_text("GAME OVER",'arial',80,RED,WIDTH/2,HEIGHT/4)
+        pygame.display.flip()
 
     def main_menu(self, mouse):
         self.draw_text("JUMPMAN", 'comicsansms', 50, LOGO, WIDTH/2, HEIGHT/4)
@@ -175,6 +208,8 @@ class Game:
             if self.clicked:
                 self.level = 1
                 self.mainMenu =False
+                self.inGameplay = True
+                self.changeHealth()
                 createLevel(self, self.level)
         else: 
             pygame.draw.rect(self.screen,BUTTON_DARK,[WIDTH/2-90,HEIGHT/2,180,40])
@@ -209,7 +244,9 @@ class Game:
                 pygame.draw.rect(self.screen,BUTTON_LIGHT,[165+i*100,255,60,60]) 
                 if self.clicked:
                     self.level = i+1
-                    self.mainMenu =False
+                    self.mainMenu = False
+                    self.inGameplay = True
+                    self.changeHealth()
                     createLevel(self, self.level)
             else: 
                 pygame.draw.rect(self.screen,BUTTON_DARK,[165+i*100,255,60,60])
@@ -253,3 +290,11 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
+
+    def changeHealth(self):
+        if self.difficulty == 1:
+            self.health = 5
+        elif self.difficulty == 2:
+            self.health = 3
+        else:
+            self.health = 1
