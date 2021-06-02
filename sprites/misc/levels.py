@@ -86,12 +86,14 @@ def createLevel(game, levelIndex):
         game.spawner.lbSpawnTime = 25
 
     for plat in platform:
-        p = Platform(*plat)
-        game.platforms.add(p)
+        for i in range(plat[2]//TILE_W):
+            p = Platform(plat[0]+TILE_W*i,plat[1])
+            game.platforms.add(p)
 
     for lad in ladder:
-        l = Ladder(*lad)
-        game.ladders.add(l)
+        for i in range(lad[2]//TILE_H):
+            l = Ladder(lad[0],lad[1]+TILE_H*i,lad[1],lad[1]+lad[2])
+            game.ladders.add(l)
 
     for coin in coi:
         c = Coin(*coin)
