@@ -28,6 +28,8 @@ class Game:
         pygame.mixer.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("JumpMan")
+        self.hearth_frame = pygame.image.load("resources/image/misc/hearth.png").convert()
+        self.hearth_frame = pygame.transform.scale(self.hearth_frame,(TILE_W,TILE_H))
         self.clock = pygame.time.Clock()
         self.difficulty = 2
         self.running = True
@@ -180,7 +182,7 @@ class Game:
         self.all_sprites.draw(self.screen)
         
         #Health UI
-        pygame.draw.rect(self.screen,RED,[TILE_W,TILE_H,TILE_W,TILE_H])
+        self.screen.blit(self.hearth_frame,(TILE_W,TILE_H))
         self.draw_text("X"+str(self.health), 'arial', 25, WHITE, TILE_W*3, TILE_H*0.7)
 
         # after drawing everything
