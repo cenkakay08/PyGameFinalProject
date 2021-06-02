@@ -50,7 +50,7 @@ class Robot(pygame.sprite.Sprite):
         #check player is dead
         hits = pygame.sprite.collide_rect(self.game.player, self)
         if hits:
-            self.game.player.isDead = True
+            self.game.player.playerDied()
 
     def walk(self):
         if self.standingPlatform != None:

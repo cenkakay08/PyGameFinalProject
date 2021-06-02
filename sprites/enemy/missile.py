@@ -22,4 +22,4 @@ class Missile(pygame.sprite.Sprite):
 
         hits = pygame.sprite.collide_rect(self.player, self)
         if hits:
-            self.player.isDead = True
+            self.player.playerDied()

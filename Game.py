@@ -38,7 +38,7 @@ class Game:
         self.clicked = False
         self.health = 3
         self.inGameOver = False
-        self.gameOverDelay = 300
+        self.gameOverDelay = 420
         self.current_gameOverDelay = self.gameOverDelay
 
     def new(self):
@@ -72,17 +72,17 @@ class Game:
                 if self.current_gameOverDelay  <= 0:
                     self.inGameOver = False
                     self.changeHealth()
+                    self.level = 1
                     createLevel(self, self.level)
                 else:
                     self.current_gameOverDelay  -= 1
-                    self.show_go_screen()
+                    self.show_go_screen(50+(30*(self.gameOverDelay - self.current_gameOverDelay)/(self.gameOverDelay-1)))
 
             else:
                 self.update()
                 self.draw()
 
     def update(self):
-        self.all_sprites.update()
 
         if self.player.vel.y > 0 :
             hits = pygame.sprite.spritecollide(self.player, self.platforms, False)
@@ -119,6 +119,9 @@ class Game:
 
         #check death
         if self.player.isDead:
+            effect = pygame.mixer.Sound('resources/sound/hurt.mp3')
+            effect.play()
+            pygame.time.delay(500)
             for sprite in self.all_sprites:
                 sprite.kill()
 
@@ -126,10 +129,13 @@ class Game:
             self.health -= 1
             if self.health <= 0:
                 self.current_gameOverDelay = self.gameOverDelay
+                effect = pygame.mixer.Sound('resources/sound/GAMEOVER.mp3')
+                effect.play()
                 for sprite in self.all_sprites:
                     sprite.kill()
                 self.inGameOver = True
         
+        self.all_sprites.update()
 
     def events(self):
         for event in pygame.event.get():
@@ -193,9 +199,9 @@ class Game:
         
         pygame.display.flip()
 
-    def show_go_screen(self):
+    def show_go_screen(self,size):
         self.screen.fill(BLACK)
-        self.draw_text("GAME OVER",'arial',80,RED,WIDTH/2,HEIGHT/4)
+        self.draw_text("GAME OVER",'arial',int(size),DARKRED,WIDTH/2,HEIGHT/4)
         pygame.display.flip()
 
     def main_menu(self, mouse):

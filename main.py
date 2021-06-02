@@ -6,7 +6,6 @@ def main():
     g = Game()
     while g.running:
         g.new()
-        g.show_go_screen()
 
     pygame.quit()
 

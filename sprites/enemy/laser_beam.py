@@ -24,7 +24,7 @@ class LaserBeam(pygame.sprite.Sprite):
             self.image.fill(WHITE)
             hits = pygame.sprite.collide_rect(self.player, self)
             if hits:
-                self.player.isDead = True
+                self.player.playerDied()
 
             if self.standingTime <= 0:
                 self.kill()
