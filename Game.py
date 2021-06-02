@@ -203,7 +203,7 @@ class Game:
 
     def show_go_screen(self,size):
         self.screen.fill(BLACK)
-        self.draw_text("GAME OVER",'arial',int(size),DARKRED,WIDTH/2,HEIGHT/4)
+        self.draw_text("YOU DIED",'arial',int(size),DARKRED,WIDTH/2,HEIGHT/4)
         pygame.display.flip()
 
     def main_menu(self, mouse):

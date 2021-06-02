@@ -9,9 +9,11 @@ vec = pygame.math.Vector2
 class Missile(pygame.sprite.Sprite):
     def __init__(self, player):
         self.player = player
+        self.vase_frame = pygame.image.load("resources/image/enemy/vase.png").convert()
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((20, 20))
-        self.image.fill(RED)
+        self.image = self.vase_frame
+        self.image = pygame.transform.scale(self.image,(TILE_W,int(TILE_H*1.5)))
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(50, WIDTH-50)
         self.rect.y = -50

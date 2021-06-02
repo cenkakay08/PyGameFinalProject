@@ -87,7 +87,7 @@ def createLevel(game, levelIndex):
 
     for plat in platform:
         for i in range(plat[2]//TILE_W):
-            p = Platform(plat[0]+TILE_W*i,plat[1])
+            p = Platform(plat[0]+TILE_W*i,plat[1],plat[0],plat[0]+plat[2])
             game.platforms.add(p)
 
     for lad in ladder:

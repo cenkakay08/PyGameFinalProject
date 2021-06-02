@@ -6,7 +6,7 @@ vec = pygame.math.Vector2
 
 
 class Platform(pygame.sprite.Sprite):
-    def __init__(self, x , y):
+    def __init__(self, x , y, left, right):
         self.platform_frame = pygame.image.load("resources/image/environment/platform.png").convert()
         pygame.sprite.Sprite.__init__(self)
         self.image = self.platform_frame
@@ -15,3 +15,4 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.platformGroup = [left, right]
