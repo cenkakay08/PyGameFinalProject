@@ -9,23 +9,22 @@ vec = pygame.math.Vector2
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game):
-        self.stand_frames_r = pygame.image.load("resources/image/player/stand.png").convert()
+        self.stand_frames_r = pygame.image.load("resources/image/player/stand.png").convert_alpha()
         self.stand_frames_l = pygame.transform.flip(self.stand_frames_r,True,False)
-        self.run_frames_r = [pygame.image.load("resources/image/player/run_1.png").convert(),pygame.image.load("resources/image/player/run_2.png").convert(),pygame.image.load("resources/image/player/run_3.png").convert(),pygame.image.load("resources/image/player/run_4.png").convert(),pygame.image.load("resources/image/player/run_5.png").convert()]
+        self.run_frames_r = [pygame.image.load("resources/image/player/run_1.png").convert_alpha(),pygame.image.load("resources/image/player/run_2.png").convert_alpha(),pygame.image.load("resources/image/player/run_3.png").convert_alpha(),pygame.image.load("resources/image/player/run_4.png").convert_alpha(),pygame.image.load("resources/image/player/run_5.png").convert_alpha()]
         self.run_frames_l = []
         for frame in self.run_frames_r:
             self.run_frames_l.append(pygame.transform.flip(frame,True,False))
-        self.jump_frames_r = pygame.image.load("resources/image/player/jump.png").convert()
+        self.jump_frames_r = pygame.image.load("resources/image/player/jump.png").convert_alpha()
         self.jump_frames_l = pygame.transform.flip(self.jump_frames_r,True,False)
-        self.climb_frames = [pygame.image.load("resources/image/player/climb_1.png").convert(),pygame.image.load("resources/image/player/climb_2.png").convert(),pygame.image.load("resources/image/player/climb_3.png").convert()]
-        self.hurt_frames_r = pygame.image.load("resources/image/player/hurt.png").convert()
+        self.climb_frames = [pygame.image.load("resources/image/player/climb_1.png").convert_alpha(),pygame.image.load("resources/image/player/climb_2.png").convert_alpha(),pygame.image.load("resources/image/player/climb_3.png").convert_alpha()]
+        self.hurt_frames_r = pygame.image.load("resources/image/player/hurt.png").convert_alpha()
         self.hurt_frames_l = pygame.transform.flip(self.hurt_frames_r,True,False)
 
         self.game = game
         pygame.sprite.Sprite.__init__(self)
         self.image = self.stand_frames_r
         self.image = pygame.transform.scale(self.image,(30,40))
-        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, TILE_H*28)
         self.pos = vec(WIDTH/2, TILE_H*28)
@@ -42,7 +41,8 @@ class Player(pygame.sprite.Sprite):
         self.isLeft = False
 
     def update(self):
-        self.animate()
+        if not self.isDead:
+            self.animate()
         self.runClimbAnimation = False
         keys = pygame.key.get_pressed()
 
@@ -119,7 +119,6 @@ class Player(pygame.sprite.Sprite):
         bottom = self.rect.bottom
         left = self.rect.left
         self.image = pygame.transform.scale(self.image,(30,40))
-        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.bottom = bottom
         self.rect.left = left
@@ -143,7 +142,6 @@ class Player(pygame.sprite.Sprite):
                 left = self.rect.left
                 self.image = self.climb_frames[self.current_frame]
                 self.image = pygame.transform.scale(self.image,(30,40))
-                self.image.set_colorkey(BLACK)
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
                 self.rect.left = left
@@ -157,7 +155,6 @@ class Player(pygame.sprite.Sprite):
             bottom = self.rect.bottom
             left = self.rect.left
             self.image = pygame.transform.scale(self.image,(30,40))
-            self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.bottom = bottom
             self.rect.left = left
@@ -172,7 +169,6 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.image = self.run_frames_l[self.current_frame]
                 self.image = pygame.transform.scale(self.image,(30,40))
-                self.image.set_colorkey(BLACK)
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
                 self.rect.left = left
@@ -184,7 +180,6 @@ class Player(pygame.sprite.Sprite):
             bottom = self.rect.bottom
             left = self.rect.left
             self.image = pygame.transform.scale(self.image,(30,40))
-            self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.bottom = bottom
             self.rect.left = left

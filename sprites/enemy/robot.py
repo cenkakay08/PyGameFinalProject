@@ -8,13 +8,13 @@ import random
 
 class Robot(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
-        self.stand_frames_r = pygame.image.load("resources/image/enemy/robot/stand.png").convert()
+        self.stand_frames_r = pygame.image.load("resources/image/enemy/robot/stand.png").convert_alpha()
         self.stand_frames_l = pygame.transform.flip(self.stand_frames_r,True,False)
-        self.climb_frames_r = [pygame.image.load("resources/image/enemy/robot/stand.png").convert(),pygame.image.load("resources/image/enemy/robot/climb.png").convert()]
+        self.climb_frames_r = [pygame.image.load("resources/image/enemy/robot/stand.png").convert_alpha(),pygame.image.load("resources/image/enemy/robot/climb.png").convert_alpha()]
         self.climb_frames_l =[]
         for frame in self.climb_frames_r:
             self.climb_frames_l.append(pygame.transform.flip(frame,True,False))
-        self.run_frames_r = [pygame.image.load("resources/image/enemy/robot/run_1.png").convert(),pygame.image.load("resources/image/enemy/robot/run_2.png").convert(),pygame.image.load("resources/image/enemy/robot/run_3.png").convert(),pygame.image.load("resources/image/enemy/robot/run_4.png").convert(),pygame.image.load("resources/image/enemy/robot/run_5.png").convert()]
+        self.run_frames_r = [pygame.image.load("resources/image/enemy/robot/run_1.png").convert_alpha(),pygame.image.load("resources/image/enemy/robot/run_2.png").convert_alpha(),pygame.image.load("resources/image/enemy/robot/run_3.png").convert_alpha(),pygame.image.load("resources/image/enemy/robot/run_4.png").convert_alpha(),pygame.image.load("resources/image/enemy/robot/run_5.png").convert_alpha()]
         self.run_frames_l = []
         for frame in self.run_frames_r:
             self.run_frames_l.append(pygame.transform.flip(frame,True,False))
@@ -22,7 +22,6 @@ class Robot(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = self.stand_frames_r
         self.image = pygame.transform.scale(self.image,(30,40))
-        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -113,7 +112,6 @@ class Robot(pygame.sprite.Sprite):
                 else:
                     self.image = self.climb_frames_r[self.current_frame]
                 self.image = pygame.transform.scale(self.image,(30,40))
-                self.image.set_colorkey(BLACK)
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
                 self.rect.left = left
@@ -128,7 +126,6 @@ class Robot(pygame.sprite.Sprite):
                 else:
                     self.image = self.run_frames_r[self.current_frame]
                 self.image = pygame.transform.scale(self.image,(30,40))
-                self.image.set_colorkey(BLACK)
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
                 self.rect.left = left

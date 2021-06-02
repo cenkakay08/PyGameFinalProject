@@ -28,7 +28,8 @@ class Game:
         pygame.mixer.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("JumpMan")
-        self.hearth_frame = pygame.image.load("resources/image/misc/hearth.png").convert()
+        self.hearth_frame = pygame.image.load("resources/image/misc/hearth.png").convert_alpha()
+        self.bacground_frames = [pygame.image.load("resources/image/misc/background_1.png").convert_alpha(),pygame.image.load("resources/image/misc/background_2.png").convert_alpha(),pygame.image.load("resources/image/misc/background_3.png").convert_alpha(),pygame.image.load("resources/image/misc/background_4.png").convert_alpha(),pygame.image.load("resources/image/misc/background_5.png").convert_alpha()]
         self.hearth_frame = pygame.transform.scale(self.hearth_frame,(TILE_W,TILE_H))
         self.clock = pygame.time.Clock()
         self.difficulty = 2
@@ -178,7 +179,10 @@ class Game:
                         self.spawner.spawnLB()
 
     def draw(self):
-        self.screen.fill(BLACK)
+        #draw background
+        for frame in self.bacground_frames:
+            image = pygame.transform.scale(frame,(WIDTH,HEIGHT))
+            self.screen.blit(image,(0,0))
         self.all_sprites.draw(self.screen)
         
         #Health UI

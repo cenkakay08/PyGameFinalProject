@@ -7,12 +7,11 @@ vec = pygame.math.Vector2
 
 class Coin(pygame.sprite.Sprite):
     def __init__(self, x , y, player):
-        self.coin_frames = [pygame.image.load("resources/image/coin/coin_1.png").convert(),pygame.image.load("resources/image/coin/coin_2.png").convert(),pygame.image.load("resources/image/coin/coin_3.png").convert(),pygame.image.load("resources/image/coin/coin_4.png").convert(),pygame.image.load("resources/image/coin/coin_5.png").convert()]
+        self.coin_frames = [pygame.image.load("resources/image/coin/coin_1.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_2.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_3.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_4.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_5.png").convert_alpha()]
         self.player = player
         pygame.sprite.Sprite.__init__(self)
         self.image = self.coin_frames[0]
         self.image = pygame.transform.scale(self.image,(TILE_W,TILE_H))
-        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -39,7 +38,6 @@ class Coin(pygame.sprite.Sprite):
             left = self.rect.left
             self.image = self.coin_frames[self.current_frame]
             self.image = pygame.transform.scale(self.image,(TILE_W,TILE_H))
-            self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.bottom = bottom
             self.rect.left = left
