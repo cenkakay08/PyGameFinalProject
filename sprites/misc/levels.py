@@ -1,9 +1,8 @@
 
 import sys
-sys.path.insert(1, '../enemy/')
-sys.path.insert(1, '../environment/')
-sys.path.insert(1, '../player/')
-sys.path.insert(1, '../../')
+sys.path.insert(1, 'sprites/enemy/')
+sys.path.insert(1, 'sprites/environment/')
+sys.path.insert(1, 'sprites/player/')
 
 from robot import Robot
 from ladder import Ladder
@@ -13,6 +12,7 @@ from guided_missile import Guided_Missile
 from player import Player
 from settings import *
 from re import match
+import pygame
 
 
 def createLevel(game, levelIndex):

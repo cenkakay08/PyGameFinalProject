@@ -1,6 +1,6 @@
 import pygame
 import sys
-sys.path.insert(1,'../enemy/')
+sys.path.insert(1,'sprites/enemy')
 from settings import *
 from guided_missile import Guided_Missile
 import random
@@ -21,10 +21,10 @@ class Spawner(pygame.sprite.Sprite):
         self.current_bSpawnTime = 0
         self.lbSpawnTime = 10
         self.current_lbSpawnTime = 0
-        self.gmMax = 1
-        self.mMax = 1
-        self.bMax = 1
-        self.lbMax = 1
+        self.gmMax = 0
+        self.mMax = 0
+        self.bMax = 0
+        self.lbMax = 0
 
     def spawnGM(self):
         if self.gmMax > 0:

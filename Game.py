@@ -29,7 +29,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("JumpMan")
         self.hearth_frame = pygame.image.load("resources/image/misc/hearth.png").convert_alpha()
-        self.bacground_frames = [pygame.image.load("resources/image/misc/background_1.png").convert_alpha(),pygame.image.load("resources/image/misc/background_2.png").convert_alpha(),pygame.image.load("resources/image/misc/background_3.png").convert_alpha(),pygame.image.load("resources/image/misc/background_4.png").convert_alpha(),pygame.image.load("resources/image/misc/background_5.png").convert_alpha()]
+        self.background_frames = [pygame.image.load("resources/image/misc/background_1.png").convert_alpha(),pygame.image.load("resources/image/misc/background_2.png").convert_alpha(),pygame.image.load("resources/image/misc/background_3.png").convert_alpha(),pygame.image.load("resources/image/misc/background_4.png").convert_alpha(),pygame.image.load("resources/image/misc/background_5.png").convert_alpha()]
         self.hearth_frame = pygame.transform.scale(self.hearth_frame,(TILE_W,TILE_H))
         self.clock = pygame.time.Clock()
         self.difficulty = 2
@@ -43,6 +43,9 @@ class Game:
         self.inGameOver = False
         self.gameOverDelay = 420
         self.current_gameOverDelay = self.gameOverDelay
+        self.levelStarted = False
+        self.levelInfoDelay = 200
+        self.current_levelInfoDelay = self.levelInfoDelay
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -72,14 +75,10 @@ class Game:
                 self.show_start_screen()
 
             elif self.inGameOver:
-                if self.current_gameOverDelay  <= 0:
-                    self.inGameOver = False
-                    self.changeHealth()
-                    self.level = 1
-                    createLevel(self, self.level)
-                else:
-                    self.current_gameOverDelay  -= 1
-                    self.show_go_screen(50+(30*(self.gameOverDelay - self.current_gameOverDelay)/(self.gameOverDelay-1)))
+                self.show_go_screen()
+
+            elif self.levelStarted:
+                self.level_info_screen()
 
             else:
                 self.update()
@@ -115,28 +114,26 @@ class Game:
             if self.level < 5:
                 self.level += 1
 
-                for sprite in self.all_sprites:
-                    sprite.kill()
+                self.killAllSprites()
 
-                createLevel(self, self.level)
+                self.levelStarted = True
 
         #check death
         if self.player.isDead:
             effect = pygame.mixer.Sound('resources/sound/hurt.mp3')
             effect.play()
             pygame.time.delay(500)
-            for sprite in self.all_sprites:
-                sprite.kill()
+            self.killAllSprites()
 
-            createLevel(self, self.level)
             self.health -= 1
             if self.health <= 0:
                 self.current_gameOverDelay = self.gameOverDelay
                 effect = pygame.mixer.Sound('resources/sound/GAMEOVER.mp3')
                 effect.play()
-                for sprite in self.all_sprites:
-                    sprite.kill()
+                self.killAllSprites()
                 self.inGameOver = True
+            else:
+                createLevel(self, self.level)
         
         self.all_sprites.update()
 
@@ -150,7 +147,14 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN: 
                     self.clicked = True
             elif self.inGameOver:
-                pass
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.killAllSprites()
+                        
+                        self.inGameplay = False
+                        self.mainMenu = True
+                        self.inGameOver = False
+                        pygame.mixer.stop()
             else:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -158,10 +162,11 @@ class Game:
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         self.player.climb()
                     if event.key == pygame.K_ESCAPE:
-                        for sprite in self.all_sprites:
-                            sprite.kill()
+                        self.killAllSprites()
                         
                         self.inGameplay = False
+                        self.selectLevel =False
+                        self.options = False
                         self.mainMenu = True
 
                 if event.type == pygame.USEREVENT:
@@ -180,7 +185,7 @@ class Game:
 
     def draw(self):
         #draw background
-        for frame in self.bacground_frames:
+        for frame in self.background_frames:
             image = pygame.transform.scale(frame,(WIDTH,HEIGHT))
             self.screen.blit(image,(0,0))
         self.all_sprites.draw(self.screen)
@@ -191,6 +196,7 @@ class Game:
 
         # after drawing everything
         pygame.display.flip()
+
 
     def show_start_screen(self):
         mouse = pygame.mouse.get_pos()
@@ -205,10 +211,18 @@ class Game:
         
         pygame.display.flip()
 
-    def show_go_screen(self,size):
-        self.screen.fill(BLACK)
-        self.draw_text("YOU DIED",'arial',int(size),DARKRED,WIDTH/2,HEIGHT/4)
-        pygame.display.flip()
+    def show_go_screen(self):
+        if self.current_gameOverDelay  <= 0:
+            self.inGameOver = False
+            self.changeHealth()
+            self.level = 1
+            self.levelStarted = True
+        else:
+            self.current_gameOverDelay  -= 1
+            self.screen.fill(BLACK)
+            self.draw_text("YOU DIED",'arial',int(50+(30*(self.gameOverDelay - self.current_gameOverDelay)/(self.gameOverDelay-1))),DARKRED,WIDTH/2,HEIGHT/4)
+            pygame.display.flip()
+        
 
     def main_menu(self, mouse):
         self.draw_text("JUMPMAN", 'comicsansms', 50, LOGO, WIDTH/2, HEIGHT/4)
@@ -222,7 +236,7 @@ class Game:
                 self.mainMenu =False
                 self.inGameplay = True
                 self.changeHealth()
-                createLevel(self, self.level)
+                self.levelStarted = True
         else: 
             pygame.draw.rect(self.screen,BUTTON_DARK,[WIDTH/2-90,HEIGHT/2,180,40])
         self.draw_text("START", 'arial', 25, WHITE, WIDTH/2-5, HEIGHT/2+5)
@@ -259,7 +273,7 @@ class Game:
                     self.mainMenu = False
                     self.inGameplay = True
                     self.changeHealth()
-                    createLevel(self, self.level)
+                    self.levelStarted = True
             else: 
                 pygame.draw.rect(self.screen,BUTTON_DARK,[165+i*100,255,60,60])
             self.draw_text(str(i+1), 'arial', 25, WHITE, 195+i*100, 270)
@@ -310,3 +324,36 @@ class Game:
             self.health = 3
         else:
             self.health = 1
+
+    def level_info_screen(self):
+        if self.current_levelInfoDelay <= 0:
+            self.killAllSprites()
+            print(self.guided_missiles)
+            self.spawner.kill()
+            self.spawner = Spawner(self)
+            createLevel(self, self.level)
+            self.current_levelInfoDelay = self.levelInfoDelay
+            self.levelStarted = False
+        else:
+            self.screen.fill(BLACK)
+            self.draw_text("LEVEL "+str(self.level),'arial',50,WHITE,WIDTH/2,HEIGHT/2)
+            pygame.display.flip()
+            self.current_levelInfoDelay -= 1
+
+    def killAllSprites(self):
+        for sprite in self.all_sprites:
+            sprite.kill()
+        for sprite in self.platforms:
+            sprite.kill()
+        for sprite in self.ladders:
+            sprite.kill()
+        for sprite in self.coins:
+            sprite.kill()
+        for sprite in self.missiles:
+            sprite.kill()
+        for sprite in self.robots:
+            sprite.kill()
+        for sprite in self.bombs:
+            sprite.kill()
+        for sprite in self.laser_beams:
+            sprite.kill()
