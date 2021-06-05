@@ -74,7 +74,7 @@ def createLevel(game, levelIndex):
 
         game.spawner.restartVariables()
         game.spawner.bMax = 50
-        game.spawner.bSpawnTime = 20
+        game.spawner.bSpawnTime = 15
     else:
         platform = [(TILE_W*10, HEIGHT-TILE_H*2, TILE_W*20, TILE_H), (TILE_W*7, TILE_H*23, TILE_W*5, TILE_H),
                     (TILE_W*28, TILE_H*23, TILE_W*5, TILE_H), (TILE_W*12, TILE_H*19, TILE_W*4, TILE_H), (TILE_W*24, TILE_H*18, TILE_W*4, TILE_H), (TILE_W*7, TILE_H*16, TILE_W*4, TILE_H), (TILE_W*19, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*29, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*3, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*13, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*28, TILE_H*11, TILE_W*3, TILE_H), (TILE_W*19, TILE_H*10, TILE_W*3, TILE_H), (TILE_W*7, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*14, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*25, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*32, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*18, TILE_H*4, TILE_W*5, TILE_H)]
