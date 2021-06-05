@@ -45,7 +45,7 @@ class Spawner(pygame.sprite.Sprite):
 
     def spawnB(self):
         if self.bMax > 0:
-            b1 = Bomb(self.game.player)
+            b1 = Bomb(self.game)
             self.game.bombs.add(b1)
             self.game.all_sprites.add(b1)
             self.bMax -= 1
