@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
         else:
             self.acc = vec(0, 0)
             #checking for dropdown after climbing action
-            if self.rect.centery >  self.climbedLadder.ladderGroup[1] and self.rect.bottom < self.climbedLadder.ladderGroup[0]+5:
+            if self.rect.bottom >  self.climbedLadder.ladderGroup[1] and self.rect.bottom < self.climbedLadder.ladderGroup[0]+5:
                 if keys[pygame.K_UP]:
                     self.runClimbAnimation = True
                     self.pos.y += -5
@@ -159,7 +159,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = bottom
             self.rect.left = left
         elif self.isWalking:
-            if now - self.last_update > 200:
+            if now - self.last_update > 100:
                 self.last_update = now
                 self.current_frame = (self.current_frame + 1) %len(self.run_frames_r)
                 bottom = self.rect.bottom

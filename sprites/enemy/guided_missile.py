@@ -45,6 +45,10 @@ class Guided_Missile(pygame.sprite.Sprite):
         if hits:
             self.player.playerDied()
 
+          #remove guided missiles out of screen
+        if self.rect.top > HEIGHT or self.rect.left > WIDTH:
+            self.kill()
+
     def animate(self):
         self.image = self.skull_frame
 

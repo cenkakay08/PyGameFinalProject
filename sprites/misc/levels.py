@@ -10,6 +10,7 @@ from coin import Coin
 from platform import Platform
 from guided_missile import Guided_Missile
 from player import Player
+from boss import Boss
 from settings import *
 from re import match
 import pygame
@@ -75,7 +76,7 @@ def createLevel(game, levelIndex):
         game.spawner.restartVariables()
         game.spawner.bMax = 50
         game.spawner.bSpawnTime = 15
-    else:
+    elif levelIndex == 5:
         platform = [(TILE_W*10, HEIGHT-TILE_H*2, TILE_W*20, TILE_H), (TILE_W*7, TILE_H*23, TILE_W*5, TILE_H),
                     (TILE_W*28, TILE_H*23, TILE_W*5, TILE_H), (TILE_W*12, TILE_H*19, TILE_W*4, TILE_H), (TILE_W*24, TILE_H*18, TILE_W*4, TILE_H), (TILE_W*7, TILE_H*16, TILE_W*4, TILE_H), (TILE_W*19, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*29, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*3, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*13, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*28, TILE_H*11, TILE_W*3, TILE_H), (TILE_W*19, TILE_H*10, TILE_W*3, TILE_H), (TILE_W*7, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*14, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*25, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*32, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*18, TILE_H*4, TILE_W*5, TILE_H)]
         coi = [(TILE_W*7, TILE_H*20, game.player), (TILE_W*19, TILE_H*18, game.player), (TILE_W*32, TILE_H*20, game.player),
@@ -84,6 +85,19 @@ def createLevel(game, levelIndex):
         game.spawner.restartVariables()
         game.spawner.lbMax = 50
         game.spawner.lbSpawnTime = 25
+
+    else:
+        platform = [(TILE_W*4, HEIGHT-TILE_H*2, TILE_W*3, TILE_H), (TILE_W*16, HEIGHT-TILE_H*2, TILE_W*7, TILE_H),
+                    (TILE_W*31, HEIGHT-TILE_H*2, TILE_W*3, TILE_H)]
+        ladder = [(TILE_W*3, TILE_H*16, TILE_H*7),
+                  (TILE_W*7, TILE_H*6, TILE_H*9),(TILE_W*11, TILE_H*12, TILE_H*13),(TILE_W*14, TILE_H*7, TILE_H*7),(TILE_W*19.5, TILE_H*6, TILE_H*18),(TILE_W*23, TILE_H*8, TILE_H*6),(TILE_W*26, TILE_H*12, TILE_H*13),(TILE_W*30, TILE_H*5, TILE_H*9),(TILE_W*34, TILE_H*16, TILE_H*7)]
+        coi = [(TILE_W*1, TILE_H*16, game.player), (TILE_W*8, TILE_H*18, game.player), (TILE_W*14, TILE_H*15, game.player),
+               (TILE_W*23, TILE_H*15, game.player), (TILE_W*28, TILE_H*18, game.player), (TILE_W*32, TILE_H*24, game.player), (TILE_W*5, TILE_H*3, game.player), (TILE_W*19.5, TILE_H*2, game.player), (TILE_W*27, TILE_H*4, game.player), (TILE_W*36, TILE_H*10, game.player)]
+
+        game.spawner.restartVariables()
+        
+        boss = Boss(game.player)
+        game.all_sprites.add(boss)
 
     for plat in platform:
         for i in range(plat[2]//TILE_W):

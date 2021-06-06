@@ -15,7 +15,6 @@ class Coin(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.isPicked = False
         self.current_frame = 0
         self.last_update = 0
 
@@ -27,7 +26,7 @@ class Coin(pygame.sprite.Sprite):
         if hits:
             effect = pygame.mixer.Sound('resources/sound/coin.wav')
             effect.play()
-            self.isPicked = True
+            self.kill()
 
     def animate(self):
         now = pygame.time.get_ticks()

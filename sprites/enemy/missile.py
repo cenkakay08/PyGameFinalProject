@@ -24,3 +24,7 @@ class Missile(pygame.sprite.Sprite):
         hits = pygame.sprite.collide_rect(self.player, self)
         if hits:
             self.player.playerDied()
+            
+        #remove missiles out of screen
+        if self.rect.top > HEIGHT:
+            self.kill()

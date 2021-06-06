@@ -16,6 +16,7 @@ from spawner import Spawner
 from robot import Robot
 from bomb import Bomb
 from laser_beam import LaserBeam
+from boss import Boss
 
 
 dif = ["EASY", "NORMAL", "HARD"]
@@ -94,24 +95,9 @@ class Game:
                 self.player.vel.y = 0
                 self.player.isJumpAvaliable = True
 
-        #remove picked coins
-        for coin in self.coins:
-            if coin.isPicked:
-                coin.kill()
-
-        #remove missiles out of screen
-        for missile in self.missiles:
-            if missile.rect.top > HEIGHT:
-                missile.kill()
-
-        #remove guided missiles out of screen
-        for guided_missile in self.guided_missiles:
-            if guided_missile.rect.top > HEIGHT or guided_missile.rect.left > WIDTH:
-                guided_missile.kill()
-
         #check win
         if len(self.coins) == 0:
-            if self.level < 5:
+            if self.level < 6:
                 self.level += 1
 
                 self.killAllSprites()
@@ -263,20 +249,22 @@ class Game:
 
     def select_level(self, mouse):
         self.draw_text("SELECT A LEVEL", 'comicsansms', 50, WHITE, WIDTH/2, HEIGHT/6)
-
-        for i in range(5):
-            pygame.draw.rect(self.screen,WHITE,[160+i*100,250,70,70]) 
-            if 165+i*100 <= mouse[0] <= 225+i*100 and 250<= mouse[1] <= 310: 
-                pygame.draw.rect(self.screen,BUTTON_LIGHT,[165+i*100,255,60,60]) 
-                if self.clicked:
-                    self.level = i+1
-                    self.mainMenu = False
-                    self.inGameplay = True
-                    self.changeHealth()
-                    self.levelStarted = True
-            else: 
-                pygame.draw.rect(self.screen,BUTTON_DARK,[165+i*100,255,60,60])
-            self.draw_text(str(i+1), 'arial', 25, WHITE, 195+i*100, 270)
+        index = 1
+        for j in range(2):
+            for i in range(3):
+                pygame.draw.rect(self.screen,WHITE,[250+i*100,250+j*100,70,70]) 
+                if 255+i*100 <= mouse[0] <= 315+i*100 and 250+j*100<= mouse[1] <= 310+j*100: 
+                    pygame.draw.rect(self.screen,BUTTON_LIGHT,[255+i*100,255+j*100,60,60]) 
+                    if self.clicked:
+                        self.level = index
+                        self.mainMenu = False
+                        self.inGameplay = True
+                        self.changeHealth()
+                        self.levelStarted = True
+                else: 
+                    pygame.draw.rect(self.screen,BUTTON_DARK,[255+i*100,255+j*100,60,60])
+                self.draw_text(str(index), 'arial', 25, WHITE, 285+i*100, 270+j*100)
+                index += 1
 
         pygame.draw.rect(self.screen,WHITE,[550,500,100,50]) 
         if 555 <= mouse[0] <= 655 and 505<= mouse[1] <= 555: 
@@ -328,7 +316,6 @@ class Game:
     def level_info_screen(self):
         if self.current_levelInfoDelay <= 0:
             self.killAllSprites()
-            print(self.guided_missiles)
             self.spawner.kill()
             self.spawner = Spawner(self)
             createLevel(self, self.level)
