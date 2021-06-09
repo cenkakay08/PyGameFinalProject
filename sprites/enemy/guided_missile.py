@@ -8,9 +8,12 @@ vec = pygame.math.Vector2
 class Guided_Missile(pygame.sprite.Sprite):
     def __init__(self, player, x, y):
         self.player = player
+        #Load Frames
         self.skull_frame = pygame.image.load("resources/image/enemy/skull.png").convert_alpha()
         self.skull_frame_r = pygame.image.load("resources/image/enemy/skull_r.png").convert_alpha()
         self.skull_frame_l = pygame.image.load("resources/image/enemy/skull_l.png").convert_alpha()
+        #Load sound effect
+        self.shot_sound = pygame.mixer.Sound('resources/sound/shot.wav')
         pygame.sprite.Sprite.__init__(self)
         self.image = self.skull_frame
         self.image = pygame.transform.scale(self.image,(TILE_W,TILE_H))
@@ -29,10 +32,14 @@ class Guided_Missile(pygame.sprite.Sprite):
                 self.inXRange = True
                 if self.player.rect.x < self.rect.x:
                     self.towards = -1
+                    
+                self.shot_sound.play()
             elif self.player.rect.left < self.rect.x < self.player.rect.right:
                 self.inYRange = True
                 if self.player.rect.y < self.rect.y:
                     self.towards = -1
+
+                self.shot_sound.play()
 
         if self.inXRange:
             self.rect.x += DIF*self.towards

@@ -9,6 +9,7 @@ vec = pygame.math.Vector2
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game):
+        #Load Frames
         self.stand_frames_r = pygame.image.load("resources/image/player/stand.png").convert_alpha()
         self.stand_frames_l = pygame.transform.flip(self.stand_frames_r,True,False)
         self.run_frames_r = [pygame.image.load("resources/image/player/run_1.png").convert_alpha(),pygame.image.load("resources/image/player/run_2.png").convert_alpha(),pygame.image.load("resources/image/player/run_3.png").convert_alpha(),pygame.image.load("resources/image/player/run_4.png").convert_alpha(),pygame.image.load("resources/image/player/run_5.png").convert_alpha()]
@@ -20,6 +21,10 @@ class Player(pygame.sprite.Sprite):
         self.climb_frames = [pygame.image.load("resources/image/player/climb_1.png").convert_alpha(),pygame.image.load("resources/image/player/climb_2.png").convert_alpha(),pygame.image.load("resources/image/player/climb_3.png").convert_alpha()]
         self.hurt_frames_r = pygame.image.load("resources/image/player/hurt.png").convert_alpha()
         self.hurt_frames_l = pygame.transform.flip(self.hurt_frames_r,True,False)
+
+        #Load sound effects
+        self.hurt_sound = pygame.mixer.Sound('resources/sound/hurt.wav')
+        self.jump_sound = pygame.mixer.Sound('resources/sound/jump.wav')
 
         self.game = game
         pygame.sprite.Sprite.__init__(self)
@@ -91,6 +96,7 @@ class Player(pygame.sprite.Sprite):
     def jump(self):
         
         if self.isJumpAvaliable:
+            self.jump_sound.play()
             self.rect.x += 8
             hits = pygame.sprite.spritecollide(self, self.game.platforms, False)
             self.rect.x -= 8
@@ -112,6 +118,7 @@ class Player(pygame.sprite.Sprite):
             self.pos.x = self.climbedLadder.rect.centerx
 
     def playerDied(self):
+        self.hurt_sound.play()
         if self.isLeft:
             self.image = self.hurt_frames_l
         else:

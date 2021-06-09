@@ -120,3 +120,6 @@ def createLevel(game, levelIndex):
     game.all_sprites.add(*game.guided_missiles)
     game.all_sprites.add(*game.robots)
     game.all_sprites.add(game.player)
+
+    #start music
+    game.musicPlayed = False

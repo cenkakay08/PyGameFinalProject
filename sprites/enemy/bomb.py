@@ -21,6 +21,8 @@ class Bomb(pygame.sprite.Sprite):
             image.set_colorkey(BLACK)
             self.explosion_frames.append(image)
 
+        self.explosion_sound = pygame.mixer.Sound('resources/sound/explosion.wav')
+
         self.image = self.bomb_frame
         self.image = pygame.transform.scale(self.image,(TILE_W*2,TILE_H*2))
         self.rect = self.image.get_rect()
@@ -33,6 +35,7 @@ class Bomb(pygame.sprite.Sprite):
         self.explodeDelay = 300
         self.fuseDelay = 500
         self.current_frame = 0
+        self.soundPlayed = False
 
     def update(self):
         #if hits a platform stops
@@ -48,7 +51,7 @@ class Bomb(pygame.sprite.Sprite):
         else:
             self.explode()
         
-        hits = pygame.sprite.collide_rect_ratio(0.8)(self.player, self)
+        hits = pygame.sprite.collide_rect_ratio(0.8)(self.game.player, self)
         if hits:
             self.game.player.isDead = True
 
@@ -73,3 +76,7 @@ class Bomb(pygame.sprite.Sprite):
 
             if now-self.last_update > self.explodeDelay:
                 self.kill()
+
+            if not self.soundPlayed:
+                self.explosion_sound.play()
+                self.soundPlayed = True

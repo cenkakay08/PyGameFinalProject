@@ -60,6 +60,7 @@ class Game:
         self.laser_beams = pygame.sprite.Group()
         self.spawner = Spawner(self)
         pygame.time.set_timer(pygame.USEREVENT, 200)
+        self.musicPlayed = False
         
         self.run()
 
@@ -73,15 +74,24 @@ class Game:
             self.clicked = False
             self.events()
             if self.mainMenu:
+
+                self.playMusic("menu")
+                
                 self.show_start_screen()
 
             elif self.inGameOver:
                 self.show_go_screen()
 
             elif self.levelStarted:
+                pygame.mixer.music.fadeout(800)
                 self.level_info_screen()
 
             else:
+                if self.level == 6:
+                    self.playMusic("boss")
+                else:
+                    self.playMusic("game")
+
                 self.update()
                 self.draw()
 
@@ -97,6 +107,10 @@ class Game:
 
         #check win
         if len(self.coins) == 0:
+            pygame.mixer.music.fadeout(500)
+            effect = pygame.mixer.Sound('resources/sound/victory.wav')
+            effect.play()
+            pygame.time.delay(4500)
             if self.level < 6:
                 self.level += 1
 
@@ -106,15 +120,13 @@ class Game:
 
         #check death
         if self.player.isDead:
-            effect = pygame.mixer.Sound('resources/sound/hurt.mp3')
-            effect.play()
             pygame.time.delay(500)
             self.killAllSprites()
 
             self.health -= 1
             if self.health <= 0:
                 self.current_gameOverDelay = self.gameOverDelay
-                effect = pygame.mixer.Sound('resources/sound/GAMEOVER.mp3')
+                effect = pygame.mixer.Sound('resources/sound/GAMEOVER.ogg')
                 effect.play()
                 self.killAllSprites()
                 self.inGameOver = True
@@ -154,6 +166,7 @@ class Game:
                         self.selectLevel =False
                         self.options = False
                         self.mainMenu = True
+                        self.musicPlayed = False
 
                 if event.type == pygame.USEREVENT:
                     self.spawner.current_gmSpawnTime -= 1
@@ -344,3 +357,23 @@ class Game:
             sprite.kill()
         for sprite in self.laser_beams:
             sprite.kill()
+
+    def playMusic(self, music):
+        if not self.musicPlayed:
+            if music == "game":
+                pygame.mixer.music.load("resources/sound/game_music.ogg")
+                pygame.mixer.music.play(-1)
+            elif music == "menu":
+                pygame.mixer.music.load("resources/sound/menu_music.ogg")
+                pygame.mixer.music.play(-1)
+            elif music == "boss":
+                pygame.mixer.music.load("resources/sound/boss_music.ogg")
+                pygame.mixer.music.play(-1)
+            elif music == "story":
+                pygame.mixer.music.load("resources/sound/story_music.ogg")
+                pygame.mixer.music.play()
+            else:
+                print("Something is wrong")
+
+            
+            self.musicPlayed = True

@@ -9,6 +9,7 @@ class Boss(pygame.sprite.Sprite):
         self.player = player
         self.boss_frames = [pygame.image.load("resources/image/enemy/boss_1.png").convert_alpha(),pygame.image.load("resources/image/enemy/boss_2.png").convert_alpha()]
         pygame.sprite.Sprite.__init__(self)
+        self.boss_sound = pygame.mixer.Sound('resources/sound/boss.wav')
         self.image = self.boss_frames[0]
         self.image = pygame.transform.scale(self.image,(TILE_H*6,TILE_H*6))
         self.rect = self.image.get_rect()
@@ -20,14 +21,20 @@ class Boss(pygame.sprite.Sprite):
         self.isLeft = False
         self.waitOnCenter = 200
         self.current_waitOnCenter = self.waitOnCenter
+        self.soundPayed = False
 
     def update(self):
         
         if self.isDropping:
             self.drop()
             self.current_waitOnCenter = self.waitOnCenter
+            self.soundPayed = False
         else:
+
             if self.current_waitOnCenter <= 0:
+                if not self.soundPayed:
+                    self.boss_sound.play()
+                    self.soundPayed = True
                 self.turn()
             else:
                 self.current_waitOnCenter -= 1
