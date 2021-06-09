@@ -183,3 +183,4 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.bottom = bottom
             self.rect.left = left
+        self.mask = pygame.mask.from_surface(self.image)

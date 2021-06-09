@@ -21,7 +21,7 @@ class Missile(pygame.sprite.Sprite):
 
         self.rect.y += 3
 
-        hits = pygame.sprite.collide_rect(self.player, self)
+        hits = pygame.sprite.collide_rect_ratio(0.8)(self.player, self)
         if hits:
             self.player.playerDied()
             

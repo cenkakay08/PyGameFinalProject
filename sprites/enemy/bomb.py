@@ -48,7 +48,7 @@ class Bomb(pygame.sprite.Sprite):
         else:
             self.explode()
         
-        hits = pygame.sprite.collide_rect(self.game.player, self)
+        hits = pygame.sprite.collide_rect_ratio(0.8)(self.player, self)
         if hits:
             self.game.player.isDead = True
 

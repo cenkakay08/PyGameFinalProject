@@ -18,17 +18,22 @@ class Boss(pygame.sprite.Sprite):
         self.current_frame = 0
         self.last_update = 0
         self.isLeft = False
+        self.waitOnCenter = 200
+        self.current_waitOnCenter = self.waitOnCenter
 
     def update(self):
         
         if self.isDropping:
             self.drop()
-
+            self.current_waitOnCenter = self.waitOnCenter
         else:
-            self.turn()
+            if self.current_waitOnCenter <= 0:
+                self.turn()
+            else:
+                self.current_waitOnCenter -= 1
 
         #check player is dead
-        hits = pygame.sprite.collide_rect(self.player, self)
+        hits = pygame.sprite.collide_mask(self, self.player)
         if hits:
             self.player.playerDied()
 
@@ -56,11 +61,14 @@ class Boss(pygame.sprite.Sprite):
 
     def animate(self):
         now = pygame.time.get_ticks()
-        if now - self.last_update> 100:
+        if now - self.last_update > 400:
             self.current_frame = (self.current_frame + 1) %len(self.boss_frames)
             bottom = self.rect.bottom
             left = self.rect.left
+            self.image = self.boss_frames[self.current_frame]
             self.image = pygame.transform.scale(self.image,(TILE_H*6,TILE_H*6))
             self.rect = self.image.get_rect()
             self.rect.bottom = bottom
             self.rect.left = left
+            self.last_update = now
+        self.mask = pygame.mask.from_surface(self.image)
