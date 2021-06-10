@@ -1,8 +1,5 @@
 import pygame
-import sys
-sys.path.insert(1,'../../')
 from settings import *
-vec = pygame.math.Vector2
 
 
 class Guided_Missile(pygame.sprite.Sprite):
@@ -32,7 +29,7 @@ class Guided_Missile(pygame.sprite.Sprite):
                 self.inXRange = True
                 if self.player.rect.x < self.rect.x:
                     self.towards = -1
-                    
+
                 self.shot_sound.play()
             elif self.player.rect.left < self.rect.x < self.player.rect.right:
                 self.inYRange = True
@@ -42,9 +39,9 @@ class Guided_Missile(pygame.sprite.Sprite):
                 self.shot_sound.play()
 
         if self.inXRange:
-            self.rect.x += DIF*self.towards
+            self.rect.x += self.towards
         elif self.inYRange:
-            self.rect.y += (DIF+2)*self.towards
+            self.rect.y += self.towards
         else:
             self.rect.y += 2
 

@@ -6,9 +6,6 @@ FPS = 60
 TILE_W = 20
 TILE_H = 20
 
-#Difficulty
-DIF = 3
-
 #Player prop
 PLAYER_ACC = 0.5
 PLAYER_FRICTION = -0.12
