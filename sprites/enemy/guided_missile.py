@@ -39,9 +39,9 @@ class Guided_Missile(pygame.sprite.Sprite):
                 self.shot_sound.play()
 
         if self.inXRange:
-            self.rect.x += self.towards
+            self.rect.x += self.towards*3
         elif self.inYRange:
-            self.rect.y += self.towards
+            self.rect.y += self.towards*3
         else:
             self.rect.y += 2
 

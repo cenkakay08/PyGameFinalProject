@@ -3,19 +3,10 @@ import pygame
 from settings import *
 from sprites.misc.levels import *
 from sprites.player.player import Player
-from sprites.environment.platform import Platform
-from sprites.environment.ladder import Ladder
-from sprites.environment.coin import Coin
-from sprites.enemy.missile import Missile
-from sprites.enemy.guided_missile import Guided_Missile
 from sprites.misc.spawner import Spawner
-from sprites.enemy.robot import Robot
-from sprites.enemy.bomb import Bomb
-from sprites.enemy.laser_beam import LaserBeam
-from sprites.enemy.boss import Boss
-from sprites.environment.one_up import One_Up
 
 dif = ["EASY", "NORMAL", "HARD"]
+
 
 class Game:
     def __init__(self):
@@ -24,13 +15,14 @@ class Game:
         pygame.mixer.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("JumpMan")
-        self.hearth_frame = pygame.image.load("resources/image/misc/hearth.png").convert_alpha()
-        self.background_frames = [pygame.image.load("resources/image/misc/background_1.png").convert_alpha(),
-                                  pygame.image.load("resources/image/misc/background_2.png").convert_alpha(),
-                                  pygame.image.load("resources/image/misc/background_3.png").convert_alpha(),
-                                  pygame.image.load("resources/image/misc/background_4.png").convert_alpha(),
-                                  pygame.image.load("resources/image/misc/background_5.png").convert_alpha()]
-        self.hearth_frame = pygame.transform.scale(self.hearth_frame, (TILE_W, TILE_H))
+        self.hearth_frame = pygame.image.load(
+            "resources/image/misc/hearth.png").convert_alpha()
+        self.background_frame = pygame.image.load(
+            "resources/image/misc/background.png").convert_alpha()
+        self.bossBackground_frames = [pygame.image.load("resources/image/misc/background_1.png").convert_alpha(), pygame.image.load("resources/image/misc/background_2.png").convert_alpha(), pygame.image.load(
+            "resources/image/misc/background_3.png").convert_alpha(), pygame.image.load("resources/image/misc/background_4.png").convert_alpha(), pygame.image.load("resources/image/misc/background_5.png").convert_alpha()]
+        self.hearth_frame = pygame.transform.scale(
+            self.hearth_frame, (TILE_W, TILE_H))
         self.clock = pygame.time.Clock()
         self.difficulty = 2
         self.running = True
@@ -101,7 +93,6 @@ class Game:
                 pygame.mixer.music.fadeout(800)
                 self.level_info_screen()
 
-
             else:
 
                 if self.level == 6:
@@ -115,7 +106,8 @@ class Game:
     def update(self):
 
         if self.player.vel.y > 0:
-            hits = pygame.sprite.spritecollide(self.player, self.platforms, False)
+            hits = pygame.sprite.spritecollide(
+                self.player, self.platforms, False)
 
             if hits and self.player.pos.y <= hits[0].rect.centery:
                 self.player.pos.y = hits[0].rect.top + 1
@@ -148,6 +140,7 @@ class Game:
             self.health -= 1
             if self.health <= 0:
                 self.current_gameOverDelay = self.gameOverDelay
+                pygame.mixer.music.stop()
                 effect = pygame.mixer.Sound('resources/sound/GAMEOVER.ogg')
                 effect.play()
                 self.killAllSprites()
@@ -166,6 +159,9 @@ class Game:
             if self.mainMenu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.clicked = True
+            elif self.story:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.current_storyDelay = self.storyDelay-1
             elif self.inGameOver:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -206,14 +202,25 @@ class Game:
 
     def draw(self):
         # draw background
-        for frame in self.background_frames:
-            image = pygame.transform.scale(frame, (WIDTH, HEIGHT))
-            self.screen.blit(image, (0, 0))
+        if self.level == 6:
+            for frame in self.bossBackground_frames:
+                image = pygame.transform.scale(
+                        frame, (WIDTH, HEIGHT))
+                self.screen.blit(image, (0, 0))
+        else:
+            for i in range(3):
+                for j in range(4):
+                    image = pygame.transform.scale(
+                        self.background_frame, (WIDTH//4, HEIGHT//3))
+                    self.screen.blit(image, (j*WIDTH//4, i*HEIGHT//3))
+
+
         self.all_sprites.draw(self.screen)
 
         # Health UI
         self.screen.blit(self.hearth_frame, (TILE_W, TILE_H))
-        self.draw_text("X" + str(self.health), 'arial', 25, WHITE, TILE_W * 3, TILE_H * 0.7, 255)
+        self.draw_text("X" + str(self.health), 'arial', 25,
+                       WHITE, TILE_W * 3, TILE_H * 0.7, 255)
 
         # after drawing everything
         pygame.display.flip()
@@ -242,57 +249,70 @@ class Game:
             self.screen.fill(BLACK)
             self.draw_text("YOU DIED", 'arial', int(
                 50 + (30 * (self.gameOverDelay - self.current_gameOverDelay) / (self.gameOverDelay - 1))), DARKRED,
-                           WIDTH / 2, HEIGHT / 4,
-                           255 * (self.gameOverDelay - self.current_gameOverDelay) / (self.gameOverDelay - 1))
+                WIDTH / 2, HEIGHT / 4,
+                255 * (self.gameOverDelay - self.current_gameOverDelay) / (self.gameOverDelay - 1))
             pygame.display.flip()
 
     def main_menu(self, mouse):
-        self.draw_text("JUMPMAN", 'comicsansms', 50, LOGO, WIDTH / 2, HEIGHT / 4, 255)
+        self.draw_text("JUMPMAN", 'comicsansms', 50,
+                       LOGO, WIDTH / 2, HEIGHT / 4, 255)
 
         # START button
-        pygame.draw.rect(self.screen, WHITE, [WIDTH / 2 - 95, HEIGHT / 2 - 5, 190, 50])
+        pygame.draw.rect(self.screen, WHITE, [
+                         WIDTH / 2 - 95, HEIGHT / 2 - 5, 190, 50])
         if WIDTH / 2 - 90 <= mouse[0] <= WIDTH / 2 + 90 and HEIGHT / 2 <= mouse[1] <= HEIGHT / 2 + 40:
-            pygame.draw.rect(self.screen, BUTTON_LIGHT, [WIDTH / 2 - 90, HEIGHT / 2, 180, 40])
+            pygame.draw.rect(self.screen, BUTTON_LIGHT, [
+                             WIDTH / 2 - 90, HEIGHT / 2, 180, 40])
             if self.clicked:
                 self.level = 1
                 self.mainMenu = False
                 self.story = True
                 self.musicPlayed = False
-                self.inGameplay = True
-                self.changeHealth()
-                self.levelStarted = True
         else:
-            pygame.draw.rect(self.screen, BUTTON_DARK, [WIDTH / 2 - 90, HEIGHT / 2, 180, 40])
-        self.draw_text("START", 'arial', 25, WHITE, WIDTH / 2 - 5, HEIGHT / 2 + 5, 255)
+            pygame.draw.rect(self.screen, BUTTON_DARK, [
+                             WIDTH / 2 - 90, HEIGHT / 2, 180, 40])
+        self.draw_text("START", 'arial', 25, WHITE,
+                       WIDTH / 2 - 5, HEIGHT / 2 + 5, 255)
 
         # Select Level Button
-        pygame.draw.rect(self.screen, WHITE, [WIDTH / 2 - 95, HEIGHT / 2 + 65, 190, 50])
+        pygame.draw.rect(self.screen, WHITE, [
+                         WIDTH / 2 - 95, HEIGHT / 2 + 65, 190, 50])
         if WIDTH / 2 - 90 <= mouse[0] <= WIDTH / 2 + 90 and HEIGHT / 2 + 70 <= mouse[1] <= HEIGHT / 2 + 110:
-            pygame.draw.rect(self.screen, BUTTON_LIGHT, [WIDTH / 2 - 90, HEIGHT / 2 + 70, 180, 40])
+            pygame.draw.rect(self.screen, BUTTON_LIGHT, [
+                             WIDTH / 2 - 90, HEIGHT / 2 + 70, 180, 40])
             if self.clicked:
                 self.selectLevel = True
         else:
-            pygame.draw.rect(self.screen, BUTTON_DARK, [WIDTH / 2 - 90, HEIGHT / 2 + 70, 180, 40])
-        self.draw_text("SELECT LEVEL", 'arial', 25, WHITE, WIDTH / 2 - 5, HEIGHT / 2 + 75, 255)
+            pygame.draw.rect(self.screen, BUTTON_DARK, [
+                             WIDTH / 2 - 90, HEIGHT / 2 + 70, 180, 40])
+        self.draw_text("SELECT LEVEL", 'arial', 25, WHITE,
+                       WIDTH / 2 - 5, HEIGHT / 2 + 75, 255)
 
         # Options button
-        pygame.draw.rect(self.screen, WHITE, [WIDTH / 2 - 95, HEIGHT / 2 + 135, 190, 50])
+        pygame.draw.rect(self.screen, WHITE, [
+                         WIDTH / 2 - 95, HEIGHT / 2 + 135, 190, 50])
         if WIDTH / 2 - 90 <= mouse[0] <= WIDTH / 2 + 90 and HEIGHT / 2 + 140 <= mouse[1] <= HEIGHT / 2 + 180:
-            pygame.draw.rect(self.screen, BUTTON_LIGHT, [WIDTH / 2 - 90, HEIGHT / 2 + 140, 180, 40])
+            pygame.draw.rect(self.screen, BUTTON_LIGHT, [
+                             WIDTH / 2 - 90, HEIGHT / 2 + 140, 180, 40])
             if self.clicked:
                 self.options = True
         else:
-            pygame.draw.rect(self.screen, BUTTON_DARK, [WIDTH / 2 - 90, HEIGHT / 2 + 140, 180, 40])
-        self.draw_text("OPTIONS", 'arial', 25, WHITE, WIDTH / 2 - 5, HEIGHT / 2 + 145, 255)
+            pygame.draw.rect(self.screen, BUTTON_DARK, [
+                             WIDTH / 2 - 90, HEIGHT / 2 + 140, 180, 40])
+        self.draw_text("OPTIONS", 'arial', 25, WHITE,
+                       WIDTH / 2 - 5, HEIGHT / 2 + 145, 255)
 
     def select_level(self, mouse):
-        self.draw_text("SELECT A LEVEL", 'comicsansms', 50, WHITE, WIDTH / 2, HEIGHT / 6, 255)
+        self.draw_text("SELECT A LEVEL", 'comicsansms', 50,
+                       WHITE, WIDTH / 2, HEIGHT / 6, 255)
         index = 1
         for j in range(2):
             for i in range(3):
-                pygame.draw.rect(self.screen, WHITE, [250 + i * 100, 250 + j * 100, 70, 70])
+                pygame.draw.rect(self.screen, WHITE, [
+                                 250 + i * 100, 250 + j * 100, 70, 70])
                 if 255 + i * 100 <= mouse[0] <= 315 + i * 100 and 250 + j * 100 <= mouse[1] <= 310 + j * 100:
-                    pygame.draw.rect(self.screen, BUTTON_LIGHT, [255 + i * 100, 255 + j * 100, 60, 60])
+                    pygame.draw.rect(self.screen, BUTTON_LIGHT, [
+                                     255 + i * 100, 255 + j * 100, 60, 60])
                     if self.clicked:
                         self.level = index
                         self.mainMenu = False
@@ -300,8 +320,10 @@ class Game:
                         self.changeHealth()
                         self.levelStarted = True
                 else:
-                    pygame.draw.rect(self.screen, BUTTON_DARK, [255 + i * 100, 255 + j * 100, 60, 60])
-                self.draw_text(str(index), 'arial', 25, WHITE, 285 + i * 100, 270 + j * 100, 255)
+                    pygame.draw.rect(self.screen, BUTTON_DARK, [
+                                     255 + i * 100, 255 + j * 100, 60, 60])
+                self.draw_text(str(index), 'arial', 25, WHITE,
+                               285 + i * 100, 270 + j * 100, 255)
                 index += 1
 
         pygame.draw.rect(self.screen, WHITE, [550, 500, 100, 50])
@@ -315,16 +337,19 @@ class Game:
 
     def options_(self, mouse):
         self.draw_text("OPTIONS", 'comicsansms', 50, WHITE, WIDTH / 2, 50, 255)
-        self.draw_text("SELECT A DIFFICULTY:", 'arial', 30, WHITE, WIDTH / 4, 150, 255)
+        self.draw_text("SELECT A DIFFICULTY:", 'arial',
+                       30, WHITE, WIDTH / 4, 150, 255)
 
         for i in range(3):
             pygame.draw.rect(self.screen, WHITE, [140 + i * 200, 200, 140, 70])
             if (145 + i * 200 <= mouse[0] <= 275 + i * 200 and 200 <= mouse[1] <= 260) or i + 1 == self.difficulty:
-                pygame.draw.rect(self.screen, BUTTON_LIGHT, [145 + i * 200, 205, 130, 60])
+                pygame.draw.rect(self.screen, BUTTON_LIGHT, [
+                                 145 + i * 200, 205, 130, 60])
                 if self.clicked:
                     self.difficulty = i + 1
             else:
-                pygame.draw.rect(self.screen, BUTTON_DARK, [145 + i * 200, 205, 130, 60])
+                pygame.draw.rect(self.screen, BUTTON_DARK, [
+                                 145 + i * 200, 205, 130, 60])
             self.draw_text(dif[i], 'arial', 25, WHITE, 210 + i * 200, 220, 255)
 
         pygame.draw.rect(self.screen, WHITE, [550, 500, 100, 50])
@@ -338,9 +363,12 @@ class Game:
 
         # How to Play
         self.draw_text("HOW TO PLAY:", 'arial', 30, WHITE, WIDTH / 5, 350, 255)
-        self.draw_text("WALK:             LEFT and RIGHT KEYS", 'arial', 20, WHITE, WIDTH / 2, 400, 255)
-        self.draw_text("JUMP:                               SPACE BAR", 'arial', 20, WHITE, WIDTH / 2, 430, 255)
-        self.draw_text("CLIMB:                 UP and DOWN KEYS", 'arial', 20, WHITE, WIDTH / 2, 460, 255)
+        self.draw_text("WALK:             LEFT and RIGHT KEYS",
+                       'arial', 20, WHITE, WIDTH / 2, 400, 255)
+        self.draw_text("JUMP:                               SPACE BAR",
+                       'arial', 20, WHITE, WIDTH / 2, 430, 255)
+        self.draw_text("CLIMB:                 UP and DOWN KEYS",
+                       'arial', 20, WHITE, WIDTH / 2, 460, 255)
 
     def draw_text(self, text, font, size, color, x, y, alpha):
         pygame.font.init()
@@ -369,7 +397,8 @@ class Game:
             self.levelStarted = False
         else:
             self.screen.fill(BLACK)
-            self.draw_text("LEVEL " + str(self.level), 'arial', 50, WHITE, WIDTH / 2, HEIGHT / 2, 255)
+            self.draw_text("LEVEL " + str(self.level), 'arial',
+                           50, WHITE, WIDTH / 2, HEIGHT / 2, 255)
             pygame.display.flip()
             self.current_levelInfoDelay -= 1
 
@@ -392,7 +421,8 @@ class Game:
 
         if self.current_fadeoutTime <= self.fadeoutTime:
             if self.isFadingOut:
-                alpha = 255 - (255 * (self.current_fadeoutTime / self.fadeoutTime))
+                alpha = 255 - \
+                    (255 * (self.current_fadeoutTime / self.fadeoutTime))
             else:
                 alpha = 255 * (self.current_fadeoutTime / self.fadeoutTime)
             self.current_fadeoutTime += 1
@@ -406,18 +436,26 @@ class Game:
             else:
                 if self.isFadingOut:
 
-                    if self.level == 0:
-                        if self.current_startingStoryScenes < self.startingStoryScenes - 1:
+                    if self.level == 1:
+                        if self.current_startingStoryScenes < self.startingStoryScenes-1:
                             self.current_startingStoryScenes += 1
                         else:
                             self.story = False
+                            self.current_startingStoryScenes = 0
                             self.musicPlayed = False
+                            self.killAllSprites()
+
+                            self.inGameplay = True
+                            self.changeHealth()
+                            self.levelStarted = True
                     else:
-                        if self.current_endingStoryScenes < self.current_endingStoryScenes:
+                        if self.current_endingStoryScenes < self.current_endingStoryScenes-1:
                             self.current_endingStoryScenes += 1
                         else:
+                            self.current_endingStoryScenes = 0
                             self.story = False
                             self.musicPlayed = False
+                            self.killAllSprites()
                     self.current_fadeoutTime = 0
                     self.isFadingOut = False
                     alpha = 0
@@ -425,12 +463,13 @@ class Game:
                     self.current_storyDelay += 1
 
         for i in range(3):
-            if self.level == 0:
+            if self.level == 1:
                 text = startingStory[self.current_startingStoryScenes * 3 + i]
             else:
                 text = endingStory[self.current_endingStoryScenes * 3 + i]
 
-            self.draw_text(text, 'arial', 25, WHITE, WIDTH / 2, 200 + i * 60, alpha)
+            self.draw_text(text, 'arial', 25, WHITE,
+                           WIDTH / 2, 200 + i * 60, alpha)
         pygame.display.flip()
 
     def killAllSprites(self):

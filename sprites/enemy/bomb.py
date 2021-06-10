@@ -50,7 +50,7 @@ class Bomb(pygame.sprite.Sprite):
         
         hits = pygame.sprite.collide_rect_ratio(0.8)(self.game.player, self)
         if hits:
-            self.game.player.isDead = True
+            self.game.player.playerDied()
 
     def explode(self):
         now = pygame.time.get_ticks()

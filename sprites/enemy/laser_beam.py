@@ -9,7 +9,7 @@ class LaserBeam(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.beam_frame = pygame.image.load("resources/image/enemy/beam.png").convert_alpha()
         self.laser_sound = pygame.mixer.Sound('resources/sound/laser.wav')
-        self.image = pygame.Surface((WIDTH/4, TILE_H*0.5))
+        self.image = pygame.Surface((WIDTH/6, TILE_H))
         self.image.fill(BEAM)
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -18,7 +18,7 @@ class LaserBeam(pygame.sprite.Sprite):
         self.firstTime = True
 
     def update(self):
-        self.mask = pygame.mask.from_surface()
+        self.mask = pygame.mask.from_surface(self.image)
         if self.chargingTime <=0:
             
             if self.firstTime:

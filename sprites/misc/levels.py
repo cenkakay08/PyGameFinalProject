@@ -3,7 +3,7 @@ import pygame
 from sprites.enemy.robot import Robot
 from sprites.environment.ladder import Ladder
 from sprites.environment.coin import Coin
-from platform import Platform
+from sprites.environment.platform import Platform
 from sprites.enemy.guided_missile import Guided_Missile
 from sprites.player.player import Player
 from sprites.enemy.boss import Boss
@@ -16,7 +16,6 @@ def createLevel(game, levelIndex):
     platform = []
     ladder = []
     coi = []
-    oneUp = []
     game.player = Player(game)
 
     if levelIndex == 1:
@@ -31,8 +30,8 @@ def createLevel(game, levelIndex):
         game.guided_missiles.add(g1)
 
         game.spawner.restartVariables()
-        game.spawner.mMax = 10
-        game.spawner.mSpawnTime = 10
+        game.spawner.mMax = 25
+        game.spawner.mSpawnTime = 20-game.difficulty*5
 
     elif levelIndex == 2:
         platform = [(TILE_W*5, HEIGHT-TILE_H*2, TILE_W*12, TILE_H), (TILE_W*23, TILE_H*28, TILE_W*12, TILE_H), (TILE_W*8, TILE_H*18, TILE_W*7,
@@ -44,8 +43,8 @@ def createLevel(game, levelIndex):
         game.player.reLocate(TILE_W*13, TILE_H*25)
 
         game.spawner.restartVariables()
-        game.spawner.gmMax = 5
-        game.spawner.gmSpawnTime = 10
+        game.spawner.gmMax = 15
+        game.spawner.gmSpawnTime = 20-game.difficulty*5
 
     elif levelIndex == 3:
         platform = [(TILE_W*4, HEIGHT-TILE_H*2, TILE_W*32, TILE_H), (TILE_W*15, TILE_H*24, TILE_W*10, TILE_H), (TILE_W*17, TILE_H*21, TILE_W*6, TILE_H), (TILE_W*18, TILE_H*19, TILE_W*4, TILE_H), (TILE_W*2,
@@ -63,25 +62,32 @@ def createLevel(game, levelIndex):
 
         game.spawner.restartVariables()
     elif levelIndex == 4:
-        platform = [(0, HEIGHT-TILE_H*2, WIDTH, TILE_H), (TILE_W*8, TILE_H*16, TILE_W*24, TILE_H),
-                    (TILE_W*22, TILE_H*11, TILE_W*14, TILE_H), (TILE_W*5, TILE_H*8, TILE_W*14, TILE_H)]
-        ladder = [(TILE_W*12, TILE_H*15, TILE_H*13),
-                  (TILE_W*27, TILE_H*15, TILE_H*13)]
-        coi = [(TILE_W*18, TILE_H*18, game.player), (TILE_W*34, TILE_H*18, game.player), (TILE_W, TILE_H*12, game.player),
-               (TILE_W*16, TILE_H*11, game.player), (TILE_W*33, TILE_H*7, game.player), (TILE_W*8, TILE_H*4, game.player)]
+        platform = [(0, HEIGHT-TILE_H*2, WIDTH, TILE_H), (TILE_W*8, TILE_H*21, TILE_W*24, TILE_H),
+                    (TILE_W*23, TILE_H*17, TILE_W*11, TILE_H), (TILE_W*6, TILE_H*13, TILE_W*11, TILE_H),(TILE_W*31, TILE_H*13, TILE_W*5, TILE_H),(TILE_W*22, TILE_H*9, TILE_W*5, TILE_H),(TILE_W*23, TILE_H*5, TILE_W*3, TILE_H)]
+        ladder = [(TILE_W*12, TILE_H*20, TILE_H*8),
+                  (TILE_W*27, TILE_H*20, TILE_H*8)]
+        coi = [(TILE_W*15, TILE_H*18, game.player), (TILE_W*35, TILE_H*19, game.player), (TILE_W, TILE_H*12, game.player),
+               (TILE_W*10, TILE_H*8, game.player), (TILE_W*24, TILE_H*7, game.player), (TILE_W*36, TILE_H*8, game.player)]
+
+        o1 = One_Up(TILE_W*24,TILE_H*2,game)
+        game.one_ups.add(o1)
 
         game.spawner.restartVariables()
         game.spawner.bMax = 50
-        game.spawner.bSpawnTime = 15
+        game.spawner.bSpawnTime = 20-game.difficulty*5
     elif levelIndex == 5:
         platform = [(TILE_W*10, HEIGHT-TILE_H*2, TILE_W*20, TILE_H), (TILE_W*7, TILE_H*23, TILE_W*5, TILE_H),
                     (TILE_W*28, TILE_H*23, TILE_W*5, TILE_H), (TILE_W*12, TILE_H*19, TILE_W*4, TILE_H), (TILE_W*24, TILE_H*18, TILE_W*4, TILE_H), (TILE_W*7, TILE_H*16, TILE_W*4, TILE_H), (TILE_W*19, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*29, TILE_H*14, TILE_W*4, TILE_H), (TILE_W*3, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*13, TILE_H*12, TILE_W*3, TILE_H), (TILE_W*28, TILE_H*11, TILE_W*3, TILE_H), (TILE_W*19, TILE_H*10, TILE_W*3, TILE_H), (TILE_W*7, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*14, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*25, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*32, TILE_H*8, TILE_W*3, TILE_H), (TILE_W*18, TILE_H*4, TILE_W*5, TILE_H)]
         coi = [(TILE_W*7, TILE_H*20, game.player), (TILE_W*19, TILE_H*18, game.player), (TILE_W*32, TILE_H*20, game.player),
                (TILE_W*15, TILE_H*16, game.player), (TILE_W*32, TILE_H*12, game.player), (TILE_W*24, TILE_H*11, game.player), (TILE_W*3, TILE_H*9, game.player), (TILE_W*20, TILE_H*8, game.player), (TILE_W*33, TILE_H*5, game.player), (TILE_W*19, TILE_H, game.player)]
 
+        if game.difficulty < 3:
+            o1 = One_Up(TILE_W*26,TILE_H*5,game)
+            game.one_ups.add(o1)
+
         game.spawner.restartVariables()
         game.spawner.lbMax = 50
-        game.spawner.lbSpawnTime = 25
+        game.spawner.lbSpawnTime = 45-game.difficulty*10
 
     else:
         platform = [(TILE_W*4, HEIGHT-TILE_H*2, TILE_W*3, TILE_H), (TILE_W*16, HEIGHT-TILE_H*2, TILE_W*7, TILE_H),
@@ -91,6 +97,10 @@ def createLevel(game, levelIndex):
         coi = [(TILE_W*1, TILE_H*16, game.player), (TILE_W*8, TILE_H*18, game.player), (TILE_W*14, TILE_H*15, game.player),
                (TILE_W*23, TILE_H*15, game.player), (TILE_W*28, TILE_H*18, game.player), (TILE_W*32, TILE_H*24, game.player), (TILE_W*5, TILE_H*3, game.player), (TILE_W*19.5, TILE_H*2, game.player), (TILE_W*27, TILE_H*4, game.player), (TILE_W*36, TILE_H*10, game.player)]
 
+        if game.difficulty < 2:
+            o1 = One_Up(TILE_W*21,TILE_H*24,game)
+            game.one_ups.add(o1)
+        
         game.spawner.restartVariables()
         
         boss = Boss(game.player)

@@ -159,7 +159,7 @@ class Player(pygame.sprite.Sprite):
             
             bottom = self.rect.bottom
             left = self.rect.left
-            self.image = pygame.transform.scale(self.image,(30,40))
+            self.image = pygame.transform.scale(self.image,(38,48))
             self.rect = self.image.get_rect()
             self.rect.bottom = bottom
             self.rect.left = left
