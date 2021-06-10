@@ -1,15 +1,13 @@
 import pygame
-import sys
-sys.path.insert(1,'sprites/enemy/')
 from settings import *
-vec = pygame.math.Vector2
 
 
 class Coin(pygame.sprite.Sprite):
     def __init__(self, x , y, player):
-        self.coin_frames = [pygame.image.load("resources/image/coin/coin_1.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_2.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_3.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_4.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_5.png").convert_alpha()]
-        self.player = player
         pygame.sprite.Sprite.__init__(self)
+        self.coin_frames = [pygame.image.load("resources/image/coin/coin_1.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_2.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_3.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_4.png").convert_alpha(),pygame.image.load("resources/image/coin/coin_5.png").convert_alpha()]
+        self.sound = pygame.mixer.Sound('resources/sound/coin.wav')
+        self.player = player
         self.image = self.coin_frames[0]
         self.image = pygame.transform.scale(self.image,(TILE_W,TILE_H))
         self.rect = self.image.get_rect()
@@ -24,8 +22,7 @@ class Coin(pygame.sprite.Sprite):
         #This way coin class did not need to know about whole game class
         hits = pygame.sprite.collide_rect(self.player, self)
         if hits:
-            effect = pygame.mixer.Sound('resources/sound/coin.wav')
-            effect.play()
+            self.sound.play()
             self.kill()
 
     def animate(self):

@@ -1,25 +1,22 @@
+import pygame
 
-import sys
-sys.path.insert(1, 'sprites/enemy/')
-sys.path.insert(1, 'sprites/environment/')
-sys.path.insert(1, 'sprites/player/')
-
-from robot import Robot
-from ladder import Ladder
-from coin import Coin
+from sprites.enemy.robot import Robot
+from sprites.environment.ladder import Ladder
+from sprites.environment.coin import Coin
 from platform import Platform
-from guided_missile import Guided_Missile
-from player import Player
-from boss import Boss
+from sprites.enemy.guided_missile import Guided_Missile
+from sprites.player.player import Player
+from sprites.enemy.boss import Boss
+from sprites.environment.one_up import One_Up
 from settings import *
 from re import match
-import pygame
 
 
 def createLevel(game, levelIndex):
     platform = []
     ladder = []
     coi = []
+    oneUp = []
     game.player = Player(game)
 
     if levelIndex == 1:
@@ -117,6 +114,7 @@ def createLevel(game, levelIndex):
     game.all_sprites.add(*game.platforms)
     game.all_sprites.add(*game.ladders)
     game.all_sprites.add(*game.coins)
+    game.all_sprites.add(*game.one_ups)
     game.all_sprites.add(*game.guided_missiles)
     game.all_sprites.add(*game.robots)
     game.all_sprites.add(game.player)

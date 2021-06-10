@@ -1,12 +1,10 @@
 import pygame
-import sys
-sys.path.insert(1,'sprites/enemy')
 from settings import *
-from guided_missile import Guided_Missile
+from sprites.enemy.guided_missile import Guided_Missile
 import random
-from missile import Missile
-from bomb import Bomb
-from laser_beam import LaserBeam
+from sprites.enemy.missile import Missile
+from sprites.enemy.bomb import Bomb
+from sprites.enemy.laser_beam import LaserBeam
 
 
 class Spawner(pygame.sprite.Sprite):

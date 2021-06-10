@@ -1,8 +1,5 @@
 import pygame
-import sys
-sys.path.insert(1,'sprites/enemy/')
 from settings import *
-vec = pygame.math.Vector2
 
 
 class Ladder(pygame.sprite.Sprite):
