@@ -122,7 +122,6 @@ class Player(pygame.sprite.Sprite):
             self.isJumpAvaliable = False
 
     def climb(self):
-        print("hi")
         hits = pygame.sprite.spritecollide(self, self.game.ladders, False)
 
         if hits:
