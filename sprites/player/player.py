@@ -70,7 +70,7 @@ class Player(pygame.sprite.Sprite):
             #climbedLadderGroup used for know when ends when start ladders that connect to each othe
             if self.rect.bottom > self.climbedLadder.ladderGroup[1] and self.rect.bottom < self.climbedLadder.ladderGroup[0]+3:
                 if keys[pygame.K_UP]:
-                    # as can see if we push bıttons animation starts
+                    # as can see if we push buttons animation starts
                     self.runClimbAnimation = True
                     self.pos.y += -5
                 if keys[pygame.K_DOWN]:
@@ -122,7 +122,7 @@ class Player(pygame.sprite.Sprite):
             self.isJumpAvaliable = False
 
     def climb(self):
-
+        print("hi")
         hits = pygame.sprite.spritecollide(self, self.game.ladders, False)
 
         if hits:

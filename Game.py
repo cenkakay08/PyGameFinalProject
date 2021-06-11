@@ -64,6 +64,7 @@ class Game:
         self.spawner = Spawner(self)
         pygame.time.set_timer(pygame.USEREVENT, 200)
         self.musicPlayed = False
+        self.player = None
 
         self.run()
 
@@ -152,6 +153,7 @@ class Game:
         self.all_sprites.update()
 
     def events(self):
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 if self.playing:
@@ -176,9 +178,11 @@ class Game:
             else:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        self.player.jump()
+                        if self.player != None:
+                            self.player.jump()
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                        self.player.climb()
+                        if self.player != None:
+                            self.player.climb()
                     if event.key == pygame.K_ESCAPE:
                         self.return_mainMenu()
 
