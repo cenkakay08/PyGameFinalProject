@@ -13,6 +13,7 @@ from re import match
 
 
 def createLevel(game, levelIndex):
+    #for level index we spawned platforms ladders and coins 
     platform = []
     ladder = []
     coi = []
@@ -28,10 +29,10 @@ def createLevel(game, levelIndex):
 
         g1 = Guided_Missile(game.player, 50, -50)
         game.guided_missiles.add(g1)
-
+        #spawner for every level declares which enemy should spawn and how frequently
         game.spawner.restartVariables()
         game.spawner.mMax = 25
-        game.spawner.mSpawnTime = 20-game.difficulty*5
+        game.spawner.mSpawnTime = 20-game.difficulty*5 #this way when difficulty increase spawn rate increase
 
     elif levelIndex == 2:
         platform = [(TILE_W*5, HEIGHT-TILE_H*2, TILE_W*12, TILE_H), (TILE_W*23, TILE_H*28, TILE_W*12, TILE_H), (TILE_W*8, TILE_H*18, TILE_W*7,
@@ -106,12 +107,16 @@ def createLevel(game, levelIndex):
         boss = Boss(game.player)
         game.all_sprites.add(boss)
 
+    #create new objects that declared befor
     for plat in platform:
+        #this way we can create small platform which is ending up group that we declared before
+        #we have to use that way because otherwise platform assets could strecth and look awfull
         for i in range(plat[2]//TILE_W):
             p = Platform(plat[0]+TILE_W*i,plat[1],plat[0],plat[0]+plat[2])
             game.platforms.add(p)
 
     for lad in ladder:
+        #same reason with platform
         for i in range(lad[2]//TILE_H):
             l = Ladder(lad[0],lad[1]+TILE_H*i,lad[1],lad[1]+lad[2])
             game.ladders.add(l)
@@ -120,7 +125,7 @@ def createLevel(game, levelIndex):
         c = Coin(*coin)
         game.coins.add(c)
 
-    # add sprites to group by draw depth
+    # add sprites to group with oreder for draw depth
     game.all_sprites.add(*game.platforms)
     game.all_sprites.add(*game.ladders)
     game.all_sprites.add(*game.coins)

@@ -19,6 +19,7 @@ class LaserBeam(pygame.sprite.Sprite):
 
     def update(self):
         self.mask = pygame.mask.from_surface(self.image)
+        #when charging is over spawn and start hurting player
         if self.chargingTime <=0:
             
             if self.firstTime:
@@ -38,7 +39,7 @@ class LaserBeam(pygame.sprite.Sprite):
             if hits:
                 self.player.playerDied()
 
-
+        #when charging follow the player and don't hurt player
         else:
             self.rect.centery = self.player.rect.centery
             self.chargingTime -= 1

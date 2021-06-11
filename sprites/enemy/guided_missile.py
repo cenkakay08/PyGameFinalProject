@@ -24,6 +24,7 @@ class Guided_Missile(pygame.sprite.Sprite):
     def update(self):
         self.animate()
 
+        #drop down until player on your direct right or left or bottom
         if not self.inXRange and not self.inYRange:
             if self.player.rect.top < self.rect.y < self.player.rect.bottom:
                 self.inXRange = True
@@ -38,6 +39,7 @@ class Guided_Missile(pygame.sprite.Sprite):
 
                 self.shot_sound.play()
 
+        #when you found player keep going on determined direction
         if self.inXRange:
             self.rect.x += self.towards*3
         elif self.inYRange:
@@ -56,6 +58,7 @@ class Guided_Missile(pygame.sprite.Sprite):
     def animate(self):
         self.image = self.skull_frame
 
+        #if missile guided on left or rigth change the frame
         if self.inXRange:
             if self.towards ==1:
                 self.image = self.skull_frame_r

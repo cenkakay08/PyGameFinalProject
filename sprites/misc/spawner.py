@@ -23,7 +23,7 @@ class Spawner(pygame.sprite.Sprite):
         self.mMax = 0
         self.bMax = 0
         self.lbMax = 0
-
+    #spawn guided missile
     def spawnGM(self):
         if self.gmMax > 0:
             g1 = Guided_Missile(self.game.player,random.randint(50, WIDTH-50),-50)
@@ -31,7 +31,7 @@ class Spawner(pygame.sprite.Sprite):
             self.game.all_sprites.add(g1)
             self.gmMax -= 1
         self.current_gmSpawnTime = self.gmSpawnTime
-
+    #spawn missile
     def spawnM(self):
         if self.mMax > 0:
             m1 = Missile(self.game.player)
@@ -40,7 +40,7 @@ class Spawner(pygame.sprite.Sprite):
             self.mMax -= 1
 
         self.current_mSpawnTime = self.mSpawnTime
-
+    #spawn bomb
     def spawnB(self):
         if self.bMax > 0:
             b1 = Bomb(self.game)
@@ -49,7 +49,7 @@ class Spawner(pygame.sprite.Sprite):
             self.bMax -= 1
 
         self.current_bSpawnTime = self.bSpawnTime
-
+    #spawn laser beam
     def spawnLB(self):
         if self.lbMax > 0:
             lb1 = LaserBeam(self.game.player)
@@ -58,7 +58,7 @@ class Spawner(pygame.sprite.Sprite):
             self.lbMax -= 1
 
         self.current_lbSpawnTime = self.lbSpawnTime
-
+    #reset variables for another use
     def restartVariables(self):
         self.gmMax = 0
         self.mMax = 0

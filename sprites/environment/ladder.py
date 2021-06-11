@@ -11,4 +11,6 @@ class Ladder(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+        #ladder group used for ladder end points
         self.ladderGroup = [bottom,top]

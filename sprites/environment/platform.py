@@ -11,4 +11,6 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+        #platform group used ford robot ai for know when they should turn back
         self.platformGroup = [left, right]

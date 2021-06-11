@@ -39,7 +39,10 @@ class Robot(pygame.sprite.Sprite):
 
     def update(self):
         if not self.isClimbing:
+            #let robot fall
             self.rect.y += 5
+
+            #if hits a platform spawn him top of platform
             hits = pygame.sprite.spritecollide(
                 self, self.game.platforms, False)
 
@@ -49,6 +52,7 @@ class Robot(pygame.sprite.Sprite):
 
             self.walk()
 
+            #if robot hits ladder there is a chance of him to climb
             hits = pygame.sprite.spritecollide(self, self.game.ladders, False)
             if hits and random.randint(0, 100) < 1:
                 self.isClimbing = True
@@ -70,6 +74,7 @@ class Robot(pygame.sprite.Sprite):
         self.animate()
 
     def walk(self):
+        #walk until end of platform group then turn back
         if self.standingPlatform != None:
             if self.goRight:
 
@@ -86,7 +91,7 @@ class Robot(pygame.sprite.Sprite):
                     self.goRight = True
 
     def climb(self):
-
+        #climb down or up through ladder group
         if self.climbedLadder != None:
             if self.climbUp:
 

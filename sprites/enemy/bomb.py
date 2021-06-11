@@ -38,6 +38,7 @@ class Bomb(pygame.sprite.Sprite):
         #if hits a platform stops
         hits = pygame.sprite.spritecollide(self, self.game.platforms, False)
 
+        #if bomb hits platform by half dont count that platform and keep falling
         if hits and self.isDropping and hits[0].platformGroup[0] <self.rect.centerx < hits[0].platformGroup[1]:
             self.isDropping = False
             self.rect.bottom = hits[0].rect.top
@@ -55,13 +56,15 @@ class Bomb(pygame.sprite.Sprite):
     def explode(self):
         now = pygame.time.get_ticks()
 
+        #Fuse time
         if self.onFuse:
             if now - self.last_update > self.fuseDelay:
                 self.onFuse = False
                 self.last_update = now
-
+        #explosion
         else:
-
+            
+            # with this make sure every frame showed before killing sprite
             if now - self.last_frameTime > self.explodeDelay/12 and self.current_frame < 11:
                 self.last_frameTime = now
                 self.current_frame +=1

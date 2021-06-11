@@ -18,22 +18,22 @@ class Boss(pygame.sprite.Sprite):
         self.current_frame = 0
         self.last_update = 0
         self.isLeft = False
-        self.waitOnCenter = 200
+        self.waitOnCenter = 120
         self.current_waitOnCenter = self.waitOnCenter
-        self.soundPayed = False
+        self.soundPlayed = False
 
     def update(self):
         
         if self.isDropping:
             self.drop()
             self.current_waitOnCenter = self.waitOnCenter
-            self.soundPayed = False
+            self.soundPlayed = False
         else:
-
+            #wait on center for a time
             if self.current_waitOnCenter <= 0:
-                if not self.soundPayed:
+                if not self.soundPlayed:
                     self.boss_sound.play()
-                    self.soundPayed = True
+                    self.soundPlayed = True
                 self.turn()
             else:
                 self.current_waitOnCenter -= 1
@@ -48,10 +48,11 @@ class Boss(pygame.sprite.Sprite):
 
     def drop(self):
         self.rect.y +=3
-
+        #drop until center of the screen
         if self.rect.centery > HEIGHT/2:
             self.rect.centery = HEIGHT/2
             self.isDropping = False
+            #turn randomly left or rigth
             self.isLeft = bool(random.getrandbits(1))
 
     def turn(self):

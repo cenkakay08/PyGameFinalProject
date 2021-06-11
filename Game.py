@@ -105,6 +105,7 @@ class Game:
 
     def update(self):
 
+        #sstanding on platforms
         if self.player.vel.y > 0:
             hits = pygame.sprite.spritecollide(
                 self.player, self.platforms, False)
@@ -129,8 +130,8 @@ class Game:
             else:
                 self.story = True
                 self.musicPlayed = False
-                self.mainMenu = True
                 self.selectLevel = False
+                self.options = False
 
         # check death
         if self.player.isDead:
@@ -156,21 +157,22 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+
+            #events for main menu
             if self.mainMenu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.clicked = True
+            #events for story
             elif self.story:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.current_storyDelay = self.storyDelay-1
+            #events for game over screen
             elif self.inGameOver:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.killAllSprites()
-
-                        self.inGameplay = False
-                        self.mainMenu = True
-                        self.inGameOver = False
+                        self.return_mainMenu()
                         pygame.mixer.stop()
+            #events for normal gameplay
             else:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -178,14 +180,9 @@ class Game:
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         self.player.climb()
                     if event.key == pygame.K_ESCAPE:
-                        self.killAllSprites()
+                        self.return_mainMenu()
 
-                        self.inGameplay = False
-                        self.selectLevel = False
-                        self.options = False
-                        self.mainMenu = True
-                        self.musicPlayed = False
-
+                #check and call spawner
                 if event.type == pygame.USEREVENT:
                     self.spawner.current_gmSpawnTime -= 1
                     self.spawner.current_mSpawnTime -= 1
@@ -202,6 +199,7 @@ class Game:
 
     def draw(self):
         # draw background
+        #draw different background for final boss
         if self.level == 6:
             for frame in self.bossBackground_frames:
                 image = pygame.transform.scale(
@@ -214,7 +212,7 @@ class Game:
                         self.background_frame, (WIDTH//4, HEIGHT//3))
                     self.screen.blit(image, (j*WIDTH//4, i*HEIGHT//3))
 
-
+        #draw all sprites
         self.all_sprites.draw(self.screen)
 
         # Health UI
@@ -225,6 +223,7 @@ class Game:
         # after drawing everything
         pygame.display.flip()
 
+    #main menu section
     def show_start_screen(self):
         mouse = pygame.mouse.get_pos()
         self.screen.fill(BLACK)
@@ -238,7 +237,9 @@ class Game:
 
         pygame.display.flip()
 
+    #game over screen
     def show_go_screen(self):
+        #made delay for gameover animation
         if self.current_gameOverDelay <= 0:
             self.inGameOver = False
             self.changeHealth()
@@ -254,6 +255,7 @@ class Game:
             pygame.display.flip()
 
     def main_menu(self, mouse):
+        #draw title
         self.draw_text("JUMPMAN", 'comicsansms', 50,
                        LOGO, WIDTH / 2, HEIGHT / 4, 255)
 
@@ -302,6 +304,7 @@ class Game:
         self.draw_text("OPTIONS", 'arial', 25, WHITE,
                        WIDTH / 2 - 5, HEIGHT / 2 + 145, 255)
 
+    #select level section
     def select_level(self, mouse):
         self.draw_text("SELECT A LEVEL", 'comicsansms', 50,
                        WHITE, WIDTH / 2, HEIGHT / 6, 255)
@@ -335,8 +338,11 @@ class Game:
             pygame.draw.rect(self.screen, BUTTON_DARK, [555, 505, 90, 40])
         self.draw_text("BACK", 'arial', 25, WHITE, 600, 510, 255)
 
+    #options section
     def options_(self, mouse):
         self.draw_text("OPTIONS", 'comicsansms', 50, WHITE, WIDTH / 2, 50, 255)
+
+        #Select difficulty
         self.draw_text("SELECT A DIFFICULTY:", 'arial',
                        30, WHITE, WIDTH / 4, 150, 255)
 
@@ -370,6 +376,7 @@ class Game:
         self.draw_text("CLIMB:                 UP and DOWN KEYS",
                        'arial', 20, WHITE, WIDTH / 2, 460, 255)
 
+    #function for drawing text on screen
     def draw_text(self, text, font, size, color, x, y, alpha):
         pygame.font.init()
         font = pygame.font.SysFont(font, size)
@@ -379,6 +386,7 @@ class Game:
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
 
+    #health declaration based on difficulty
     def changeHealth(self):
         if self.difficulty == 1:
             self.health = 5
@@ -387,6 +395,7 @@ class Game:
         else:
             self.health = 1
 
+    #black screen with current level drawing on
     def level_info_screen(self):
         if self.current_levelInfoDelay <= 0:
             self.killAllSprites()
@@ -402,6 +411,7 @@ class Game:
             pygame.display.flip()
             self.current_levelInfoDelay -= 1
 
+    #starting and ending story section with fading animation
     def story_squence(self):
         self.screen.fill(BLACK)
         startingStory = ["A long time ago in a faraway land lived a brave warrior.",
@@ -449,15 +459,14 @@ class Game:
                             self.changeHealth()
                             self.levelStarted = True
                     else:
-                        if self.current_endingStoryScenes < self.current_endingStoryScenes-1:
+                        if self.current_endingStoryScenes < self.endingStoryScenes-1:
                             self.current_endingStoryScenes += 1
                         else:
                             self.current_endingStoryScenes = 0
-                            self.story = False
-                            self.musicPlayed = False
-                            self.killAllSprites()
+                            self.return_mainMenu()
                     self.current_fadeoutTime = 0
                     self.isFadingOut = False
+                    self.current_storyDelay = 0
                     alpha = 0
                 else:
                     self.current_storyDelay += 1
@@ -472,6 +481,7 @@ class Game:
                            WIDTH / 2, 200 + i * 60, alpha)
         pygame.display.flip()
 
+    #kill all sprites from every group (this needed for some bugs that spawns multiple enemy)
     def killAllSprites(self):
         for sprite in self.all_sprites:
             sprite.kill()
@@ -492,7 +502,9 @@ class Game:
         for sprite in self.one_ups:
             sprite.kill()
 
+    #function for playing music easily
     def playMusic(self, music):
+        #don't start music if already plays exect we say so
         if not self.musicPlayed:
             pygame.mixer.music.fadeout(500)
             if music == "game":
@@ -511,3 +523,14 @@ class Game:
                 print("Something is wrong")
 
             self.musicPlayed = True
+
+    #make ready every variable for goin in main menu
+    def return_mainMenu(self):
+        self.killAllSprites()
+        self.inGameplay = False
+        self.inGameOver = False
+        self.selectLevel = False
+        self.options = False
+        self.mainMenu = True
+        self.story = False
+        self.musicPlayed = False
