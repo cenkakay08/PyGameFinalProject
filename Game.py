@@ -252,7 +252,7 @@ class Game:
         else:
             self.current_gameOverDelay -= 1
             self.screen.fill(BLACK)
-            self.draw_text("YOU DIED", 'arial', int(
+            self.draw_text("GAME OVER", 'arial', int(
                 50 + (30 * (self.gameOverDelay - self.current_gameOverDelay) / (self.gameOverDelay - 1))), DARKRED,
                 WIDTH / 2, HEIGHT / 4,
                 255 * (self.gameOverDelay - self.current_gameOverDelay) / (self.gameOverDelay - 1))
