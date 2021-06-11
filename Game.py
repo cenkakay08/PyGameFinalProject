@@ -105,7 +105,7 @@ class Game:
 
     def update(self):
 
-        #sstanding on platforms
+        #standing on platforms
         if self.player.vel.y > 0:
             hits = pygame.sprite.spritecollide(
                 self.player, self.platforms, False)

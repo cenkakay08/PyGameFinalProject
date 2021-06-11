@@ -68,7 +68,7 @@ class Player(pygame.sprite.Sprite):
             self.acc = vec(0, 0)
             # checking for dropdown after climbing action
             #climbedLadderGroup used for know when ends when start ladders that connect to each othe
-            if self.rect.bottom > self.climbedLadder.ladderGroup[1] and self.rect.bottom < self.climbedLadder.ladderGroup[0]+5:
+            if self.rect.bottom > self.climbedLadder.ladderGroup[1] and self.rect.bottom < self.climbedLadder.ladderGroup[0]+3:
                 if keys[pygame.K_UP]:
                     # as can see if we push bıttons animation starts
                     self.runClimbAnimation = True
