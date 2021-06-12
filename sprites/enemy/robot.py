@@ -34,7 +34,6 @@ class Robot(pygame.sprite.Sprite):
         self.climbUp = True
         self.current_frame = 0
         self.last_update = 0
-        self.runClimbAnimation = False
         self.isLeft = False
 
     def update(self):

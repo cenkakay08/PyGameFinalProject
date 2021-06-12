@@ -34,11 +34,14 @@ class Game:
         self.clicked = False
         self.health = 3
         self.inGameOver = False
+        # Game over screen animation
         self.gameOverDelay = 420
         self.current_gameOverDelay = self.gameOverDelay
         self.levelStarted = False
+        # level started info screen
         self.levelInfoDelay = 200
         self.current_levelInfoDelay = self.levelInfoDelay
+
         # Story fadeout Variables
         self.fadeoutTime = 100
         self.current_fadeoutTime = 0
@@ -106,7 +109,7 @@ class Game:
 
     def update(self):
 
-        #standing on platforms
+        # standing on platforms
         if self.player.vel.y > 0:
             hits = pygame.sprite.spritecollide(
                 self.player, self.platforms, False)
@@ -153,28 +156,28 @@ class Game:
         self.all_sprites.update()
 
     def events(self):
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 if self.playing:
                     self.playing = False
                 self.running = False
 
-            #events for main menu
+            # events for main menu
             if self.mainMenu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.clicked = True
-            #events for story
+            # events for story
             elif self.story:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.current_storyDelay = self.storyDelay-1
-            #events for game over screen
+            # events for game over screen
             elif self.inGameOver:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.return_mainMenu()
                         pygame.mixer.stop()
-            #events for normal gameplay
+            # events for normal gameplay
             else:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -186,7 +189,7 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self.return_mainMenu()
 
-                #check and call spawner
+                # check and call spawner
                 if event.type == pygame.USEREVENT:
                     self.spawner.current_gmSpawnTime -= 1
                     self.spawner.current_mSpawnTime -= 1
@@ -203,11 +206,11 @@ class Game:
 
     def draw(self):
         # draw background
-        #draw different background for final boss
+        # draw different background for final boss
         if self.level == 6:
             for frame in self.bossBackground_frames:
                 image = pygame.transform.scale(
-                        frame, (WIDTH, HEIGHT))
+                    frame, (WIDTH, HEIGHT))
                 self.screen.blit(image, (0, 0))
         else:
             for i in range(3):
@@ -216,7 +219,7 @@ class Game:
                         self.background_frame, (WIDTH//4, HEIGHT//3))
                     self.screen.blit(image, (j*WIDTH//4, i*HEIGHT//3))
 
-        #draw all sprites
+        # draw all sprites
         self.all_sprites.draw(self.screen)
 
         # Health UI
@@ -227,7 +230,7 @@ class Game:
         # after drawing everything
         pygame.display.flip()
 
-    #main menu section
+    # main menu section
     def show_start_screen(self):
         mouse = pygame.mouse.get_pos()
         self.screen.fill(BLACK)
@@ -241,9 +244,9 @@ class Game:
 
         pygame.display.flip()
 
-    #game over screen
+    # game over screen
     def show_go_screen(self):
-        #made delay for gameover animation
+        # made delay for gameover animation
         if self.current_gameOverDelay <= 0:
             self.inGameOver = False
             self.changeHealth()
@@ -259,7 +262,7 @@ class Game:
             pygame.display.flip()
 
     def main_menu(self, mouse):
-        #draw title
+        # draw title
         self.draw_text("JUMPMAN", 'comicsansms', 50,
                        LOGO, WIDTH / 2, HEIGHT / 4, 255)
 
@@ -308,7 +311,7 @@ class Game:
         self.draw_text("OPTIONS", 'arial', 25, WHITE,
                        WIDTH / 2 - 5, HEIGHT / 2 + 145, 255)
 
-    #select level section
+    # select level section
     def select_level(self, mouse):
         self.draw_text("SELECT A LEVEL", 'comicsansms', 50,
                        WHITE, WIDTH / 2, HEIGHT / 6, 255)
@@ -342,11 +345,11 @@ class Game:
             pygame.draw.rect(self.screen, BUTTON_DARK, [555, 505, 90, 40])
         self.draw_text("BACK", 'arial', 25, WHITE, 600, 510, 255)
 
-    #options section
+    # options section
     def options_(self, mouse):
         self.draw_text("OPTIONS", 'comicsansms', 50, WHITE, WIDTH / 2, 50, 255)
 
-        #Select difficulty
+        # Select difficulty
         self.draw_text("SELECT A DIFFICULTY:", 'arial',
                        30, WHITE, WIDTH / 4, 150, 255)
 
@@ -380,7 +383,7 @@ class Game:
         self.draw_text("CLIMB:                 UP and DOWN KEYS",
                        'arial', 20, WHITE, WIDTH / 2, 460, 255)
 
-    #function for drawing text on screen
+    # function for drawing text on screen
     def draw_text(self, text, font, size, color, x, y, alpha):
         pygame.font.init()
         font = pygame.font.SysFont(font, size)
@@ -390,7 +393,7 @@ class Game:
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
 
-    #health declaration based on difficulty
+    # health declaration based on difficulty
     def changeHealth(self):
         if self.difficulty == 1:
             self.health = 5
@@ -399,7 +402,7 @@ class Game:
         else:
             self.health = 1
 
-    #black screen with current level drawing on
+    # black screen with current level drawing on
     def level_info_screen(self):
         if self.current_levelInfoDelay <= 0:
             self.killAllSprites()
@@ -415,7 +418,7 @@ class Game:
             pygame.display.flip()
             self.current_levelInfoDelay -= 1
 
-    #starting and ending story section with fading animation
+    # starting and ending story section with fading animation
     def story_squence(self):
         self.screen.fill(BLACK)
         startingStory = ["A long time ago in a faraway land lived a brave warrior.",
@@ -485,7 +488,7 @@ class Game:
                            WIDTH / 2, 200 + i * 60, alpha)
         pygame.display.flip()
 
-    #kill all sprites from every group (this needed for some bugs that spawns multiple enemy)
+    # kill all sprites from every group (this needed for some bugs that spawns multiple enemy)
     def killAllSprites(self):
         for sprite in self.all_sprites:
             sprite.kill()
@@ -506,9 +509,9 @@ class Game:
         for sprite in self.one_ups:
             sprite.kill()
 
-    #function for playing music easily
+    # function for playing music easily
     def playMusic(self, music):
-        #don't start music if already plays exect we say so
+        # don't start music if already plays exect we say so
         if not self.musicPlayed:
             pygame.mixer.music.fadeout(500)
             if music == "game":
@@ -528,7 +531,7 @@ class Game:
 
             self.musicPlayed = True
 
-    #make ready every variable for goin in main menu
+    # make ready every variable for goin in main menu
     def return_mainMenu(self):
         self.killAllSprites()
         self.inGameplay = False

@@ -5,6 +5,8 @@ vec = pygame.math.Vector2
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game):
+        pygame.sprite.Sprite.__init__(self)
+
         # Load Frames
         self.stand_frames_r = pygame.image.load(
             "resources/image/player/stand.png").convert_alpha()
@@ -31,7 +33,6 @@ class Player(pygame.sprite.Sprite):
         self.jump_sound = pygame.mixer.Sound('resources/sound/jump.wav')
 
         self.game = game
-        pygame.sprite.Sprite.__init__(self)
         self.image = self.stand_frames_r
         self.image = pygame.transform.scale(self.image, (30, 40))
         self.rect = self.image.get_rect()
@@ -111,13 +112,9 @@ class Player(pygame.sprite.Sprite):
         #jump avaliable when charecter stands on platform
         if self.isJumpAvaliable:
             self.jump_sound.play()
-            self.rect.x += 8
-            hits = pygame.sprite.spritecollide(
-                self, self.game.platforms, False)
-            self.rect.x -= 8
-            if hits or self.isClimbing:
-                self.isClimbing = False
-                self.vel.y = -16
+            
+            self.isClimbing = False
+            self.vel.y = -16
 
             self.isJumpAvaliable = False
 
